@@ -1,0 +1,800 @@
+<!-- M4: Sproglig mikrotest / simple button version -->
+<section id="m4-simple-language-test">
+  <style>
+    #m4-simple-language-test {
+      --m4-red: #ef4b45;
+      --m4-red-dark: #c93631;
+      --m4-text: #1f2a2e;
+      --m4-muted: #6c7175;
+      --m4-line: rgba(239, 75, 69, 0.55);
+      --m4-soft-line: rgba(239, 75, 69, 0.22);
+      --m4-bg: #ffffff;
+      --m4-soft: #fff7f6;
+
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 44px 18px 70px;
+      background: var(--m4-bg);
+      color: var(--m4-text);
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    #m4-simple-language-test * {
+      box-sizing: border-box;
+    }
+
+    .m4-hero {
+      max-width: 680px;
+      margin: 40px auto 90px;
+      padding-left: 4px;
+    }
+
+    .m4-hero h2 {
+      margin: 0;
+      color: var(--m4-red);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: clamp(2.1rem, 5vw, 4.1rem);
+      font-weight: 400;
+      letter-spacing: -0.055em;
+      line-height: 1;
+    }
+
+    .m4-hero p {
+      margin: 22px 0 0;
+      color: var(--m4-red);
+      font-size: 1.15rem;
+      line-height: 1.35;
+      max-width: 560px;
+    }
+
+    .m4-rule {
+      border-top: 1px solid var(--m4-line);
+      margin: 0 -18px 46px;
+    }
+
+    .m4-controls {
+      max-width: 860px;
+      margin: 0 auto 36px;
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 22px;
+      border-bottom: 1px solid var(--m4-soft-line);
+      padding-bottom: 24px;
+    }
+
+    .m4-controls-title {
+      color: var(--m4-red);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .m4-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .m4-actions button,
+    .m4-choice {
+      appearance: none;
+      border: 1px solid var(--m4-line);
+      background: #fff;
+      color: var(--m4-red-dark);
+      padding: 8px 11px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 0;
+    }
+
+    .m4-actions button:hover,
+    .m4-choice:hover {
+      background: var(--m4-soft);
+    }
+
+    .m4-actions button.primary {
+      background: var(--m4-red);
+      color: #fff;
+      border-color: var(--m4-red);
+    }
+
+    .m4-actions button.primary:hover {
+      background: var(--m4-red-dark);
+    }
+
+    .m4-status {
+      flex-basis: 100%;
+      color: var(--m4-muted);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 0.82rem;
+      margin-top: 4px;
+    }
+
+    .m4-meta {
+      max-width: 860px;
+      margin: 0 auto 44px;
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 22px;
+    }
+
+    .m4-meta-title {
+      color: var(--m4-red);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .m4-meta-fields {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .m4-field label,
+    .m4-comment label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--m4-muted);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .m4-field input,
+    .m4-comment textarea {
+      width: 100%;
+      border: 1px solid var(--m4-soft-line);
+      border-bottom: 1px solid var(--m4-line);
+      background: #fff;
+      color: var(--m4-text);
+      padding: 9px 8px;
+      border-radius: 0;
+      font: inherit;
+      outline: none;
+    }
+
+    .m4-field input {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 0.9rem;
+    }
+
+    .m4-comment textarea {
+      min-height: 72px;
+      resize: vertical;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+    .m4-field input:focus,
+    .m4-comment textarea:focus {
+      border-color: var(--m4-red);
+      box-shadow: 0 1px 0 var(--m4-red);
+    }
+
+    .m4-list {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .m4-row {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 22px;
+      padding: 28px 0;
+      border-top: 1px solid var(--m4-soft-line);
+    }
+
+    .m4-row:last-child {
+      border-bottom: 1px solid var(--m4-soft-line);
+    }
+
+    .m4-left {
+      color: var(--m4-red);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .m4-id {
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .m4-context {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      line-height: 1.35;
+      color: var(--m4-red);
+      opacity: 0.8;
+    }
+
+    .m4-text-main {
+      font-size: clamp(1.25rem, 2.4vw, 1.65rem);
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+
+    .m4-translations {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 14px 0 18px;
+      color: var(--m4-muted);
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+
+    .m4-translation {
+      border-left: 1px solid var(--m4-soft-line);
+      padding-left: 12px;
+    }
+
+    .m4-translation strong {
+      display: block;
+      color: var(--m4-red);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 4px;
+    }
+
+    .m4-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 10px 0 14px;
+    }
+
+    .m4-choice.active {
+      background: var(--m4-red);
+      color: #fff;
+      border-color: var(--m4-red);
+    }
+
+    .m4-footer-note {
+      max-width: 860px;
+      margin: 34px auto 0;
+      color: var(--m4-muted);
+      font-size: 0.95rem;
+      line-height: 1.45;
+      border-top: 1px solid var(--m4-line);
+      padding-top: 18px;
+    }
+
+    @media (max-width: 760px) {
+      #m4-simple-language-test {
+        padding-top: 20px;
+      }
+
+      .m4-hero {
+        margin: 24px 0 54px;
+      }
+
+      .m4-controls,
+      .m4-meta,
+      .m4-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .m4-meta-fields,
+      .m4-translations {
+        grid-template-columns: 1fr;
+      }
+
+      .m4-row {
+        padding: 24px 0;
+      }
+    }
+  </style>
+
+  <div class="m4-hero">
+    <h2>M4 · Orð og tónalag</h2>
+    <p>
+      Ein lítil málslig meting av tekstunum til QR-plakat og QR-síðu.
+      Vel tað, sum hóskar best, og skriva viðmerking um tú vilt.
+    </p>
+  </div>
+
+  <div class="m4-rule"></div>
+
+  <div class="m4-controls">
+    <div class="m4-controls-title">Export</div>
+    <div class="m4-actions">
+      <button class="primary" type="button" onclick="m4Save()">Gem lokalt</button>
+      <button type="button" onclick="m4DownloadCSV()">Download CSV</button>
+      <button type="button" onclick="m4DownloadJSON()">Download JSON</button>
+      <button type="button" onclick="m4Clear()">Nulstil</button>
+      <div class="m4-status" id="m4-status">Ikke gemt endnu</div>
+    </div>
+  </div>
+
+  <div class="m4-meta">
+    <div class="m4-meta-title">Info</div>
+    <div class="m4-meta-fields">
+      <div class="m4-field">
+        <label for="m4-reviewer">Navn / rolle</label>
+        <input id="m4-reviewer" type="text" placeholder="Fx sprogfaglig person">
+      </div>
+
+      <div class="m4-field">
+        <label for="m4-date">Dato</label>
+        <input id="m4-date" type="date">
+      </div>
+
+      <div class="m4-field">
+        <label for="m4-focus">Sprogblik</label>
+        <input id="m4-focus" type="text" placeholder="Fx føroyskt + týskt">
+      </div>
+    </div>
+  </div>
+
+  <div class="m4-list" id="m4-list"></div>
+
+  <div class="m4-footer-note">
+    Kommentarerne gemmes kun lokalt i browseren. Download derfor CSV eller JSON, når vurderingen er færdig.
+  </div>
+
+  <script>
+    const m4StorageKey = "m4_simple_word_test_ahandil_v2";
+
+    const m4Choices = [
+      "Teksturin er ok",
+      "Hann skal broytast",
+      "Ger tekstin lættari",
+      "Ger tekstin meira natúrligan",
+      "Ov ferðavinnukendur",
+      "Ógreitt",
+      "Ov langt",
+      "Góð orðing"
+    ];
+
+    const m4Sentences = [
+      {
+        id: "M4-01",
+        context: "Høvuðstekstur á QR-plakat",
+        da: "Ny her?",
+        fo: "Nýggj/ur her?",
+        de: "Neu hier?"
+      },
+      {
+        id: "M4-02",
+        context: "Stuttur tekstur undir yvirskriftini",
+        da: "Få et lille første indblik, før du går ind.",
+        fo: "Fá eitt lítið fyrsta innlit, áðrenn tú fert inn.",
+        de: "Erhalte einen kleinen ersten Einblick, bevor du hineingehst."
+      },
+      {
+        id: "M4-03",
+        context: "Instruksjón við QR-kotu",
+        da: "Scan koden",
+        fo: "Skanna kotuna",
+        de: "Code scannen"
+      },
+      {
+        id: "M4-04",
+        context: "Forklaring á QR-plakat",
+        da: "Se åbningstider, genkend butikken, og få lidt hjælp, hvis du er i tvivl.",
+        fo: "Sí upplatingartíðir, kenn handilin aftur, og fá eitt sindur av hjálp, um tú ivast.",
+        de: "Sieh die Öffnungszeiten, erkenne den Laden wieder und erhalte etwas Hilfe, falls du unsicher bist."
+      },
+      {
+        id: "M4-05",
+        context: "Vinalig hjálpitekst",
+        da: "Spørg os gerne",
+        fo: "Spyr okkum endiliga",
+        de: "Frag uns gern"
+      },
+      {
+        id: "M4-06",
+        context: "Lítil tekstur niðast á plakatini",
+        da: "Et frivilligt supplement ved indgangen",
+        fo: "Eitt sjálvboðið ískoyti við inngongdina",
+        de: "Eine freiwillige Ergänzung am Eingang"
+      },
+      {
+        id: "M4-07",
+        context: "Navn / label",
+        da: "Á handil í Vestmanna",
+        fo: "Á handil í Vestmanna",
+        de: "Á handil in Vestmanna"
+      },
+      {
+        id: "M4-08",
+        context: "Yvirskrift á QR-síðu",
+        da: "Velkommen til Á handil",
+        fo: "Vælkomin í Á handil",
+        de: "Willkommen bei Á handil"
+      },
+      {
+        id: "M4-09",
+        context: "Intro á QR-síðu",
+        da: "Her finder du åbningstider, et lille indblik i Á handil og lidt hjælp, hvis du er i tvivl om noget.",
+        fo: "Her finnur tú upplatingartíðir, eitt lítið innlit í Á handil og eitt sindur av hjálp, um tú ivast um okkurt.",
+        de: "Hier findest du Öffnungszeiten, einen kleinen Einblick in Á handil und etwas Hilfe, falls du unsicher bist."
+      },
+      {
+        id: "M4-10",
+        context: "Yvirskrift við mynd av handlinum",
+        da: "Sådan ser Á handil ud",
+        fo: "Soleiðis sær Á handil út",
+        de: "So sieht Á handil aus"
+      },
+      {
+        id: "M4-11",
+        context: "Hjálp til at kenna handilin aftur",
+        da: "Butikken kan kendes på den mørke facade og det grønne Á.",
+        fo: "Handilin kennist aftur á myrku framsíðuni og grøna Á-inum.",
+        de: "Den Laden erkennt man an der dunklen Fassade und dem grünen Á."
+      },
+      {
+        id: "M4-12",
+        context: "Myndatekstur",
+        da: "Facaden på Á handil i Vestmanna",
+        fo: "Framsíðan á Á handli í Vestmanna",
+        de: "Die Fassade von Á handil in Vestmanna"
+      },
+      {
+        id: "M4-13",
+        context: "Lítið label",
+        da: "Kendetegn",
+        fo: "Eyðkenni",
+        de: "Erkennungsmerkmal"
+      },
+      {
+        id: "M4-14",
+        context: "Forklaring til mynd",
+        da: "Billedet viser, hvordan butikken ser ud ved ankomst.",
+        fo: "Myndin vísir, hvussu handilin sær út, tá tú kemur fram.",
+        de: "Das Bild zeigt, wie der Laden bei der Ankunft aussieht."
+      },
+      {
+        id: "M4-15",
+        context: "Yvirskrift",
+        da: "Åbningstider",
+        fo: "Upplatingartíðir",
+        de: "Öffnungszeiten"
+      },
+      {
+        id: "M4-16",
+        context: "Label við upplatingartíðir",
+        da: "Praktisk information",
+        fo: "Praktisk kunning",
+        de: "Praktische Information"
+      },
+      {
+        id: "M4-17",
+        context: "Intro til upplatingartíðir",
+        da: "Butikken holder åbent",
+        fo: "Handilin hevur opið",
+        de: "Der Laden ist geöffnet"
+      },
+      {
+        id: "M4-18",
+        context: "Gerandisdagar",
+        da: "Mandag–lørdag: 09.00–22.00",
+        fo: "Mánadag–leygardag: 09.00–22.00",
+        de: "Montag–Samstag: 09.00–22.00"
+      },
+      {
+        id: "M4-19",
+        context: "Sunnudagur",
+        da: "Søndag: Lukket",
+        fo: "Sunnudag: Stongt",
+        de: "Sonntag: geschlossen"
+      },
+      {
+        id: "M4-20",
+        context: "Viðmerking um halgidagar",
+        da: "Tjek gerne hjemmesiden eller opslag ved butikken ved helligdage.",
+        fo: "Kanna gjarna heimasíðuna ella uppsløg við handilin á halgidøgum.",
+        de: "Bitte prüfe an Feiertagen die Website oder Aushänge am Laden."
+      },
+      {
+        id: "M4-21",
+        context: "Yvirskrift til stutta intro",
+        da: "Et lille første indblik",
+        fo: "Eitt lítið fyrsta innlit",
+        de: "Ein kleiner erster Einblick"
+      },
+      {
+        id: "M4-22",
+        context: "Stuttur tekstur um handilin",
+        da: "Á handil er den lokale butik i Vestmanna. Her kan du handle, spørge og få hjælp, hvis du er i tvivl om noget.",
+        fo: "Á handil er lokali handilin í Vestmanna. Her kanst tú keypa, spyrja og fáa hjálp, um tú ivast um okkurt.",
+        de: "Á handil ist der lokale Laden in Vestmanna. Hier kannst du einkaufen, fragen und Hilfe bekommen, falls du unsicher bist."
+      },
+      {
+        id: "M4-23",
+        context: "Label",
+        da: "Lokal butik",
+        fo: "Lokalur handil",
+        de: "Lokaler Laden"
+      },
+      {
+        id: "M4-24",
+        context: "Tekstur um handilin sum sosialt stað",
+        da: "Á handil er ikke kun et sted for indkøb. Det er også en lokal butik, hvor folk ofte stopper op, hilser og får en lille snak.",
+        fo: "Á handil er ikki bara eitt stað at keypa inn. Tað er eisini ein lokalur handil, har fólk ofta steðga á, heilsa og fáa eitt lítið prát.",
+        de: "Á handil ist nicht nur ein Ort zum Einkaufen. Es ist auch ein lokaler Laden, wo Menschen oft kurz stehen bleiben, grüßen und miteinander sprechen."
+      },
+      {
+        id: "M4-25",
+        context: "Yvirskrift til tilboð",
+        da: "Se ugens tilbud",
+        fo: "Sí tilboðini hesa vikuna",
+        de: "Angebote der Woche ansehen"
+      },
+      {
+        id: "M4-26",
+        context: "Forklaring við tilboðsblað",
+        da: "Du kan også åbne butikkens tilbudsblad. Tilbudsbladet er på færøsk.",
+        fo: "Tú kanst eisini lata tilboðsblaðið hjá handlinum upp. Tilboðsblaðið er á føroyskum.",
+        de: "Du kannst auch das Angebotsblatt des Ladens öffnen. Das Angebotsblatt ist auf Färöisch."
+      },
+      {
+        id: "M4-27",
+        context: "Knaptekstur",
+        da: "Åbn tilbudsblad",
+        fo: "Lat tilboðsblaðið upp",
+        de: "Angebotsblatt öffnen"
+      },
+      {
+        id: "M4-28",
+        context: "Label við leinki",
+        da: "PDF på færøsk",
+        fo: "PDF á føroyskum",
+        de: "PDF auf Färöisch"
+      },
+      {
+        id: "M4-29",
+        context: "Hjálpiseksjón",
+        da: "Har du brug for hjælp?",
+        fo: "Hevur tú tørv á hjálp?",
+        de: "Brauchst du Hilfe?"
+      },
+      {
+        id: "M4-30",
+        context: "Hjálpitekstur",
+        da: "Hvis du leder efter noget bestemt eller vil vide mere om butikken, hjælper vi gerne.",
+        fo: "Um tú leitar eftir onkrum ávísum ella vilt vita meira um handilin, hjálpa vit fegin.",
+        de: "Wenn du etwas Bestimmtes suchst oder mehr über den Laden wissen möchtest, helfen wir gern."
+      },
+      {
+        id: "M4-31",
+        context: "Knap/leinki til heimasíðu",
+        da: "Til Á handils hjemmeside",
+        fo: "Til heimasíðuna hjá Á handli",
+        de: "Zur Website von Á handil"
+      },
+      {
+        id: "M4-32",
+        context: "Forklaring við leinki",
+        da: "Mere information om butikken",
+        fo: "Meira kunning um handilin",
+        de: "Mehr Informationen über den Laden"
+      }
+    ];
+
+    function m4EscapeHTML(str) {
+      return String(str || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+    }
+
+    function m4Today() {
+      return new Date().toISOString().slice(0, 10);
+    }
+
+    function m4Render() {
+      const list = document.getElementById("m4-list");
+
+      list.innerHTML = m4Sentences.map(item => `
+        <article class="m4-row" data-id="${item.id}">
+          <div class="m4-left">
+            <div class="m4-id">${item.id}</div>
+            <div class="m4-context">${m4EscapeHTML(item.context)}</div>
+          </div>
+
+          <div class="m4-right">
+            <div class="m4-text-main">${m4EscapeHTML(item.da)}</div>
+
+            <div class="m4-translations">
+              <div class="m4-translation">
+                <strong>Føroyskt</strong>
+                ${m4EscapeHTML(item.fo)}
+              </div>
+
+              <div class="m4-translation">
+                <strong>Deutsch</strong>
+                ${m4EscapeHTML(item.de)}
+              </div>
+            </div>
+
+            <div class="m4-buttons">
+              ${m4Choices.map(choice => `
+                <button class="m4-choice" type="button" data-choice="${m4EscapeHTML(choice)}">
+                  ${m4EscapeHTML(choice)}
+                </button>
+              `).join("")}
+            </div>
+
+            <div class="m4-comment">
+              <label for="${item.id}-comment">Viðmerking / forslag</label>
+              <textarea id="${item.id}-comment" data-comment placeholder="Skriva viðmerking her, um tú vilt."></textarea>
+            </div>
+          </div>
+        </article>
+      `).join("");
+
+      document.getElementById("m4-date").value = m4Today();
+
+      document.querySelectorAll(".m4-choice").forEach(btn => {
+        btn.addEventListener("click", function () {
+          btn.classList.toggle("active");
+          m4AutoSave();
+        });
+      });
+
+      document.querySelectorAll("#m4-simple-language-test textarea, #m4-simple-language-test input")
+        .forEach(el => {
+          el.addEventListener("input", m4AutoSave);
+          el.addEventListener("change", m4AutoSave);
+        });
+
+      m4Load();
+    }
+
+    function m4Collect() {
+      return {
+        project: "M4 – enkel sproglig mikrotest",
+        savedAt: new Date().toISOString(),
+        reviewer: document.getElementById("m4-reviewer").value || "",
+        date: document.getElementById("m4-date").value || "",
+        focus: document.getElementById("m4-focus").value || "",
+        items: m4Sentences.map(item => {
+          const row = document.querySelector(`[data-id="${item.id}"]`);
+          const selected = Array.from(row.querySelectorAll(".m4-choice.active")).map(btn => btn.dataset.choice);
+
+          return {
+            id: item.id,
+            context: item.context,
+            danish: item.da,
+            faroese: item.fo,
+            german: item.de,
+            selected: selected,
+            comment: row.querySelector("[data-comment]").value || ""
+          };
+        })
+      };
+    }
+
+    function m4Save() {
+      const data = m4Collect();
+      localStorage.setItem(m4StorageKey, JSON.stringify(data));
+      document.getElementById("m4-status").textContent = "Gemt lokalt " + new Date().toLocaleTimeString("da-DK");
+    }
+
+    let m4Timer = null;
+    function m4AutoSave() {
+      clearTimeout(m4Timer);
+      m4Timer = setTimeout(m4Save, 400);
+    }
+
+    function m4Load() {
+      const raw = localStorage.getItem(m4StorageKey);
+      if (!raw) return;
+
+      try {
+        const data = JSON.parse(raw);
+
+        document.getElementById("m4-reviewer").value = data.reviewer || "";
+        document.getElementById("m4-date").value = data.date || m4Today();
+        document.getElementById("m4-focus").value = data.focus || "";
+
+        (data.items || []).forEach(saved => {
+          const row = document.querySelector(`[data-id="${saved.id}"]`);
+          if (!row) return;
+
+          row.querySelector("[data-comment]").value = saved.comment || "";
+
+          row.querySelectorAll(".m4-choice").forEach(btn => {
+            if ((saved.selected || []).includes(btn.dataset.choice)) {
+              btn.classList.add("active");
+            }
+          });
+        });
+
+        document.getElementById("m4-status").textContent = "Tidligere lokal gemning indlæst";
+      } catch (e) {
+        document.getElementById("m4-status").textContent = "Kunne ikke indlæse lokal gemning";
+      }
+    }
+
+    function m4Download(filename, content, type) {
+      const blob = new Blob([content], { type: type });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function m4DownloadJSON() {
+      const data = m4Collect();
+      const name = "M4-ordtest-A-handil-" + (data.date || m4Today()) + ".json";
+      m4Download(name, JSON.stringify(data, null, 2), "application/json;charset=utf-8");
+    }
+
+    function m4CSVCell(value) {
+      const v = Array.isArray(value) ? value.join(", ") : String(value || "");
+      return '"' + v.replaceAll('"', '""') + '"';
+    }
+
+    function m4DownloadCSV() {
+      const data = m4Collect();
+
+      const rows = [
+        [
+          "id",
+          "context",
+          "danish",
+          "faroese",
+          "german",
+          "selected",
+          "comment",
+          "reviewer",
+          "date",
+          "focus"
+        ]
+      ];
+
+      data.items.forEach(item => {
+        rows.push([
+          item.id,
+          item.context,
+          item.danish,
+          item.faroese,
+          item.german,
+          item.selected,
+          item.comment,
+          data.reviewer,
+          data.date,
+          data.focus
+        ]);
+      });
+
+      const csv = rows.map(row => row.map(m4CSVCell).join(";")).join("\n");
+      const name = "M4-ordtest-A-handil-" + (data.date || m4Today()) + ".csv";
+      m4Download(name, csv, "text/csv;charset=utf-8");
+    }
+
+    function m4Clear() {
+      const ok = confirm("Vil du nulstille alle lokale svar?");
+      if (!ok) return;
+
+      localStorage.removeItem(m4StorageKey);
+
+      document.querySelectorAll(".m4-choice.active").forEach(btn => btn.classList.remove("active"));
+      document.querySelectorAll("[data-comment]").forEach(area => area.value = "");
+      document.getElementById("m4-reviewer").value = "";
+      document.getElementById("m4-focus").value = "";
+      document.getElementById("m4-date").value = m4Today();
+      document.getElementById("m4-status").textContent = "Nulstillet";
+    }
+
+    m4Render();
+  </script>
+</section>
