@@ -1,800 +1,1001 @@
-<!-- M4: Sproglig mikrotest / simple button version -->
-<section id="m4-simple-language-test">
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Á handil · Sprogtjek</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Export libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/vfs_fonts.min.js"></script>
+
   <style>
-    #m4-simple-language-test {
-      --m4-red: #ef4b45;
-      --m4-red-dark: #c93631;
-      --m4-text: #1f2a2e;
-      --m4-muted: #6c7175;
-      --m4-line: rgba(239, 75, 69, 0.55);
-      --m4-soft-line: rgba(239, 75, 69, 0.22);
-      --m4-bg: #ffffff;
-      --m4-soft: #fff7f6;
-
-      max-width: 1060px;
-      margin: 0 auto;
-      padding: 44px 18px 70px;
-      background: var(--m4-bg);
-      color: var(--m4-text);
-      font-family: Georgia, "Times New Roman", serif;
+    :root {
+      --bg: #f4eee4;
+      --card: #fffdfa;
+      --green: #50af31;
+      --green-dark: #3f8c27;
+      --green-soft: #eef7ea;
+      --red: #ef4b45;
+      --text: #2f3133;
+      --muted: #6c7176;
+      --line: rgba(0,0,0,0.1);
+      --shadow: 0 12px 28px rgba(0,0,0,0.08);
+      --radius: 22px;
+      font-family: "Open Sans", Arial, sans-serif;
     }
 
-    #m4-simple-language-test * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
-    .m4-hero {
-      max-width: 680px;
-      margin: 40px auto 90px;
-      padding-left: 4px;
-    }
-
-    .m4-hero h2 {
+    body {
       margin: 0;
-      color: var(--m4-red);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: clamp(2.1rem, 5vw, 4.1rem);
-      font-weight: 400;
-      letter-spacing: -0.055em;
-      line-height: 1;
+      background: linear-gradient(180deg, #fbf7ef 0%, #f4edde 100%);
+      color: var(--text);
+      font-family: "Open Sans", Arial, sans-serif;
     }
 
-    .m4-hero p {
-      margin: 22px 0 0;
-      color: var(--m4-red);
-      font-size: 1.15rem;
-      line-height: 1.35;
-      max-width: 560px;
+    .page {
+      width: min(1180px, calc(100% - 28px));
+      margin: 28px auto;
     }
 
-    .m4-rule {
-      border-top: 1px solid var(--m4-line);
-      margin: 0 -18px 46px;
-    }
-
-    .m4-controls {
-      max-width: 860px;
-      margin: 0 auto 36px;
+    .hero {
+      background: linear-gradient(135deg, rgba(80,175,49,0.98), rgba(55,124,36,0.96));
+      color: white;
+      border-radius: 28px;
+      padding: 28px;
+      box-shadow: 0 20px 40px rgba(50,90,40,0.18);
       display: grid;
-      grid-template-columns: 180px 1fr;
-      gap: 22px;
-      border-bottom: 1px solid var(--m4-soft-line);
-      padding-bottom: 24px;
+      gap: 14px;
     }
 
-    .m4-controls-title {
-      color: var(--m4-red);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 1rem;
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(1.65rem, 4vw, 2.45rem);
+      line-height: 1.05;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 760px;
+      color: rgba(255,255,255,0.92);
+      line-height: 1.55;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin: 18px 0;
+      padding: 14px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 10px;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+    }
+
+    .toolbar-left,
+    .toolbar-right {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    input[type="search"], select {
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 999px;
+      padding: 11px 14px;
+      min-height: 42px;
+      font: inherit;
+      color: var(--text);
+    }
+
+    input[type="search"] {
+      width: min(360px, 100%);
+    }
+
+    button {
+      border: 0;
+      min-height: 42px;
+      border-radius: 999px;
+      padding: 10px 15px;
+      background: var(--green);
+      color: white;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    button.secondary {
+      background: white;
+      color: var(--green-dark);
+      border: 1px solid rgba(63,140,39,0.22);
+    }
+
+    button.danger {
+      background: var(--red);
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .pill {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      border-radius: 999px;
+      background: white;
+      border: 1px solid var(--line);
+      padding: 8px 12px;
+      color: var(--muted);
+      font-size: 0.9rem;
       font-weight: 700;
     }
 
-    .m4-actions {
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .string-card {
+      background: var(--card);
+      border: 1px solid rgba(0,0,0,0.07);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .string-head {
       display: flex;
       flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      background: rgba(255,255,255,0.72);
+    }
+
+    .key {
+      font-weight: 800;
+      color: var(--green-dark);
+    }
+
+    .context {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 1px;
+      background: rgba(0,0,0,0.06);
+    }
+
+    .cell {
+      background: var(--card);
+      padding: 12px;
+      min-height: 150px;
+      display: grid;
+      align-content: start;
       gap: 8px;
     }
 
-    .m4-actions button,
-    .m4-choice {
-      appearance: none;
-      border: 1px solid var(--m4-line);
-      background: #fff;
-      color: var(--m4-red-dark);
-      padding: 8px 11px;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 0.82rem;
-      font-weight: 600;
-      cursor: pointer;
-      border-radius: 0;
-    }
-
-    .m4-actions button:hover,
-    .m4-choice:hover {
-      background: var(--m4-soft);
-    }
-
-    .m4-actions button.primary {
-      background: var(--m4-red);
-      color: #fff;
-      border-color: var(--m4-red);
-    }
-
-    .m4-actions button.primary:hover {
-      background: var(--m4-red-dark);
-    }
-
-    .m4-status {
-      flex-basis: 100%;
-      color: var(--m4-muted);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 0.82rem;
-      margin-top: 4px;
-    }
-
-    .m4-meta {
-      max-width: 860px;
-      margin: 0 auto 44px;
-      display: grid;
-      grid-template-columns: 180px 1fr;
-      gap: 22px;
-    }
-
-    .m4-meta-title {
-      color: var(--m4-red);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-    }
-
-    .m4-meta-fields {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-
-    .m4-field label,
-    .m4-comment label {
-      display: block;
-      margin-bottom: 6px;
-      color: var(--m4-muted);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .m4-field input,
-    .m4-comment textarea {
-      width: 100%;
-      border: 1px solid var(--m4-soft-line);
-      border-bottom: 1px solid var(--m4-line);
-      background: #fff;
-      color: var(--m4-text);
-      padding: 9px 8px;
-      border-radius: 0;
-      font: inherit;
-      outline: none;
-    }
-
-    .m4-field input {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 0.9rem;
-    }
-
-    .m4-comment textarea {
-      min-height: 72px;
-      resize: vertical;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 0.92rem;
-      line-height: 1.45;
-    }
-
-    .m4-field input:focus,
-    .m4-comment textarea:focus {
-      border-color: var(--m4-red);
-      box-shadow: 0 1px 0 var(--m4-red);
-    }
-
-    .m4-list {
-      max-width: 860px;
-      margin: 0 auto;
-    }
-
-    .m4-row {
-      display: grid;
-      grid-template-columns: 180px 1fr;
-      gap: 22px;
-      padding: 28px 0;
-      border-top: 1px solid var(--m4-soft-line);
-    }
-
-    .m4-row:last-child {
-      border-bottom: 1px solid var(--m4-soft-line);
-    }
-
-    .m4-left {
-      color: var(--m4-red);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-
-    .m4-id {
+    .cell label {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
       font-size: 0.78rem;
       font-weight: 800;
-      letter-spacing: 0.06em;
+      color: var(--muted);
       text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
-    .m4-context {
-      margin-top: 8px;
-      font-size: 0.82rem;
-      line-height: 1.35;
-      color: var(--m4-red);
-      opacity: 0.8;
+    .source-text {
+      color: var(--text);
+      line-height: 1.45;
+      font-size: 0.95rem;
+      white-space: pre-wrap;
     }
 
-    .m4-text-main {
-      font-size: clamp(1.25rem, 2.4vw, 1.65rem);
-      line-height: 1.25;
-      margin-bottom: 10px;
+    textarea {
+      width: 100%;
+      min-height: 92px;
+      resize: vertical;
+      border: 1px solid rgba(0,0,0,0.11);
+      border-radius: 14px;
+      padding: 10px;
+      background: #fff;
+      color: var(--text);
+      font: inherit;
+      line-height: 1.45;
     }
 
-    .m4-translations {
+    textarea:focus,
+    input:focus,
+    select:focus {
+      outline: 3px solid rgba(80,175,49,0.18);
+      border-color: rgba(80,175,49,0.55);
+    }
+
+    .status-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin: 14px 0 18px;
-      color: var(--m4-muted);
-      font-size: 0.95rem;
-      line-height: 1.45;
+      grid-template-columns: 220px 1fr;
+      gap: 12px;
+      padding: 14px 16px;
+      border-top: 1px solid rgba(0,0,0,0.06);
+      background: rgba(255,255,255,0.58);
     }
 
-    .m4-translation {
-      border-left: 1px solid var(--m4-soft-line);
-      padding-left: 12px;
+    .status-row textarea {
+      min-height: 70px;
     }
 
-    .m4-translation strong {
-      display: block;
-      color: var(--m4-red);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 4px;
+    .empty {
+      display: none;
+      text-align: center;
+      padding: 34px;
+      color: var(--muted);
+      background: white;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
     }
 
-    .m4-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      margin: 10px 0 14px;
-    }
+    .empty.visible { display: block; }
 
-    .m4-choice.active {
-      background: var(--m4-red);
-      color: #fff;
-      border-color: var(--m4-red);
-    }
-
-    .m4-footer-note {
-      max-width: 860px;
-      margin: 34px auto 0;
-      color: var(--m4-muted);
-      font-size: 0.95rem;
-      line-height: 1.45;
-      border-top: 1px solid var(--m4-line);
-      padding-top: 18px;
-    }
-
-    @media (max-width: 760px) {
-      #m4-simple-language-test {
-        padding-top: 20px;
-      }
-
-      .m4-hero {
-        margin: 24px 0 54px;
-      }
-
-      .m4-controls,
-      .m4-meta,
-      .m4-row {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
-
-      .m4-meta-fields,
-      .m4-translations {
+    @media (max-width: 980px) {
+      .grid {
         grid-template-columns: 1fr;
       }
 
-      .m4-row {
-        padding: 24px 0;
+      .cell {
+        min-height: auto;
       }
+
+      .status-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media print {
+      .toolbar { display: none; }
+      body { background: white; }
+      .page { width: 100%; margin: 0; }
+      .hero { box-shadow: none; }
+      .string-card { break-inside: avoid; box-shadow: none; }
+      textarea { border: 1px solid #ddd; }
     }
   </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <h1>Á handil · sprogtjek</h1>
+      <p>Brug siden som et enkelt localization-værktøj: ret eller kommentér oversættelserne, filtrér efter sprog/status og download arbejdet som Excel eller PDF.</p>
+    </section>
 
-  <div class="m4-hero">
-    <h2>M4 · Orð og tónalag</h2>
-    <p>
-      Ein lítil málslig meting av tekstunum til QR-plakat og QR-síðu.
-      Vel tað, sum hóskar best, og skriva viðmerking um tú vilt.
-    </p>
-  </div>
-
-  <div class="m4-rule"></div>
-
-  <div class="m4-controls">
-    <div class="m4-controls-title">Export</div>
-    <div class="m4-actions">
-      <button class="primary" type="button" onclick="m4Save()">Gem lokalt</button>
-      <button type="button" onclick="m4DownloadCSV()">Download CSV</button>
-      <button type="button" onclick="m4DownloadJSON()">Download JSON</button>
-      <button type="button" onclick="m4Clear()">Nulstil</button>
-      <div class="m4-status" id="m4-status">Ikke gemt endnu</div>
-    </div>
-  </div>
-
-  <div class="m4-meta">
-    <div class="m4-meta-title">Info</div>
-    <div class="m4-meta-fields">
-      <div class="m4-field">
-        <label for="m4-reviewer">Navn / rolle</label>
-        <input id="m4-reviewer" type="text" placeholder="Fx sprogfaglig person">
+    <section class="toolbar" aria-label="Værktøjslinje">
+      <div class="toolbar-left">
+        <input id="searchInput" type="search" placeholder="Søg efter key, tekst eller kommentar…" />
+        <select id="languageFilter" aria-label="Filtrér efter sprog">
+          <option value="all">Alle sprog</option>
+          <option value="da">Dansk</option>
+          <option value="en">English</option>
+          <option value="fr">Français</option>
+          <option value="fo">Føroyskt</option>
+          <option value="de">Deutsch</option>
+        </select>
+        <select id="statusFilter" aria-label="Filtrér efter status">
+          <option value="all">Alle statusser</option>
+          <option value="needs-review">Skal tjekkes</option>
+          <option value="approved">Godkendt</option>
+          <option value="issue">Har kommentar</option>
+        </select>
       </div>
 
-      <div class="m4-field">
-        <label for="m4-date">Dato</label>
-        <input id="m4-date" type="date">
+      <div class="toolbar-right">
+        <button type="button" class="secondary" id="saveButton">Gem i browser</button>
+        <button type="button" id="excelButton">Download Excel</button>
+        <button type="button" id="pdfButton">Download PDF</button>
+        <button type="button" class="danger" id="resetButton">Nulstil</button>
       </div>
+    </section>
 
-      <div class="m4-field">
-        <label for="m4-focus">Sprogblik</label>
-        <input id="m4-focus" type="text" placeholder="Fx føroyskt + týskt">
-      </div>
-    </div>
-  </div>
+    <section class="meta" aria-live="polite">
+      <span class="pill"><strong id="countVisible">0</strong> viste strenge</span>
+      <span class="pill"><strong id="countApproved">0</strong> godkendt</span>
+      <span class="pill"><strong id="countIssues">0</strong> med kommentar</span>
+    </section>
 
-  <div class="m4-list" id="m4-list"></div>
-
-  <div class="m4-footer-note">
-    Kommentarerne gemmes kun lokalt i browseren. Download derfor CSV eller JSON, når vurderingen er færdig.
-  </div>
+    <section id="strings" class="layout"></section>
+    <section id="empty" class="empty">Ingen strenge matcher filtreringen.</section>
+  </main>
 
   <script>
-    const m4StorageKey = "m4_simple_word_test_ahandil_v2";
+    const STORAGE_KEY = "ahandil-localize-review-v1";
 
-    const m4Choices = [
-      "Teksturin er ok",
-      "Hann skal broytast",
-      "Ger tekstin lættari",
-      "Ger tekstin meira natúrligan",
-      "Ov ferðavinnukendur",
-      "Ógreitt",
-      "Ov langt",
-      "Góð orðing"
+    const languages = [
+      { code: "da", label: "Dansk" },
+      { code: "en", label: "English" },
+      { code: "fr", label: "Français" },
+      { code: "fo", label: "Føroyskt" },
+      { code: "de", label: "Deutsch" }
     ];
 
-    const m4Sentences = [
+    const sourceStrings = [
       {
-        id: "M4-01",
-        context: "Høvuðstekstur á QR-plakat",
-        da: "Ny her?",
-        fo: "Nýggj/ur her?",
-        de: "Neu hier?"
+        key: "statusLeft",
+        context: "Statusbar øverst i telefon-preview",
+        text: {
+          da: "Ny her?",
+          en: "New here?",
+          fr: "Nouveau ici ?",
+          fo: "Nýggj/ur her?",
+          de: "Neu hier?"
+        }
       },
       {
-        id: "M4-02",
-        context: "Stuttur tekstur undir yvirskriftini",
-        da: "Få et lille første indblik, før du går ind.",
-        fo: "Fá eitt lítið fyrsta innlit, áðrenn tú fert inn.",
-        de: "Erhalte einen kleinen ersten Einblick, bevor du hineingehst."
+        key: "statusRight",
+        context: "Statusbar, stednavn",
+        text: {
+          da: "Vestmanna",
+          en: "Vestmanna",
+          fr: "Vestmanna",
+          fo: "Vestmanna",
+          de: "Vestmanna"
+        }
       },
       {
-        id: "M4-03",
-        context: "Instruksjón við QR-kotu",
-        da: "Scan koden",
-        fo: "Skanna kotuna",
-        de: "Code scannen"
+        key: "brandSmall",
+        context: "Lille tekst over navnet i topbaren",
+        text: {
+          da: "Underside",
+          en: "Subpage",
+          fr: "Sous-page",
+          fo: "Undirsíða",
+          de: "Unterseite"
+        }
       },
       {
-        id: "M4-04",
-        context: "Forklaring á QR-plakat",
-        da: "Se åbningstider, genkend butikken, og få lidt hjælp, hvis du er i tvivl.",
-        fo: "Sí upplatingartíðir, kenn handilin aftur, og fá eitt sindur av hjálp, um tú ivast.",
-        de: "Sieh die Öffnungszeiten, erkenne den Laden wieder und erhalte etwas Hilfe, falls du unsicher bist."
+        key: "brandStrong",
+        context: "Butiksnavn i topbaren",
+        text: {
+          da: "Á handil í Vestmanna",
+          en: "Á handil in Vestmanna",
+          fr: "Á handil à Vestmanna",
+          fo: "Á handil í Vestmanna",
+          de: "Á handil in Vestmanna"
+        }
       },
       {
-        id: "M4-05",
-        context: "Vinalig hjálpitekst",
-        da: "Spørg os gerne",
-        fo: "Spyr okkum endiliga",
-        de: "Frag uns gern"
+        key: "heroEyebrow",
+        context: "Grøn hero-boks, lille label",
+        text: {
+          da: "📍 Velkommen til Á handil",
+          en: "📍 Welcome to Á handil",
+          fr: "📍 Bienvenue chez Á handil",
+          fo: "📍 Vælkomin í Á handil",
+          de: "📍 Willkommen bei Á handil"
+        }
       },
       {
-        id: "M4-06",
-        context: "Lítil tekstur niðast á plakatini",
-        da: "Et frivilligt supplement ved indgangen",
-        fo: "Eitt sjálvboðið ískoyti við inngongdina",
-        de: "Eine freiwillige Ergänzung am Eingang"
+        key: "heroTitle",
+        context: "Primær overskrift",
+        text: {
+          da: "Ny her?",
+          en: "New here?",
+          fr: "Nouveau ici ?",
+          fo: "Nýggj/ur her?",
+          de: "Neu hier?"
+        }
       },
       {
-        id: "M4-07",
-        context: "Navn / label",
-        da: "Á handil í Vestmanna",
-        fo: "Á handil í Vestmanna",
-        de: "Á handil in Vestmanna"
+        key: "heroText",
+        context: "Intro under hero-overskrift",
+        text: {
+          da: "Her finder du åbningstider, et lille indblik i Á handil og lidt hjælp, hvis du er i tvivl om noget.",
+          en: "Here you can find opening hours, a short introduction to Á handil, and a little help if you are unsure about anything.",
+          fr: "Vous trouverez ici les horaires, une petite présentation de Á handil et un peu d’aide si vous avez un doute.",
+          fo: "Her finnur tú upplatingartíðir, eitt lítið innlit í Á handil og eitt sindur av hjálp, um tú ert í iva um okkurt.",
+          de: "Hier findest du die Öffnungszeiten, einen kurzen Einblick in Á handil und etwas Hilfe, falls du unsicher bist."
+        }
       },
       {
-        id: "M4-08",
-        context: "Yvirskrift á QR-síðu",
-        da: "Velkommen til Á handil",
-        fo: "Vælkomin í Á handil",
-        de: "Willkommen bei Á handil"
+        key: "facadeTitle",
+        context: "Afsnitstitel ved facadefoto",
+        text: {
+          da: "Sådan ser Á handil ud",
+          en: "This is what Á handil looks like",
+          fr: "Voici à quoi ressemble Á handil",
+          fo: "Soleiðis sær Á handil út",
+          de: "So sieht Á handil aus"
+        }
       },
       {
-        id: "M4-09",
-        context: "Intro á QR-síðu",
-        da: "Her finder du åbningstider, et lille indblik i Á handil og lidt hjælp, hvis du er i tvivl om noget.",
-        fo: "Her finnur tú upplatingartíðir, eitt lítið innlit í Á handil og eitt sindur av hjálp, um tú ivast um okkurt.",
-        de: "Hier findest du Öffnungszeiten, einen kleinen Einblick in Á handil und etwas Hilfe, falls du unsicher bist."
+        key: "facadeSub",
+        context: "Hjælpetekst ved facadefoto",
+        text: {
+          da: "Butikken kan kendes på den mørke facade og det grønne Á.",
+          en: "The shop can be recognised by its dark facade and the green Á.",
+          fr: "Le magasin se reconnaît à sa façade sombre et au Á vert.",
+          fo: "Handilin kennist aftur á myrku fasaduni og tí grøna Á-num.",
+          de: "Du erkennst den Laden an der dunklen Fassade und dem grünen Á."
+        }
       },
       {
-        id: "M4-10",
-        context: "Yvirskrift við mynd av handlinum",
-        da: "Sådan ser Á handil ud",
-        fo: "Soleiðis sær Á handil út",
-        de: "So sieht Á handil aus"
+        key: "facadeTag",
+        context: "Kort tag på facadekort",
+        text: {
+          da: "Kendetegn",
+          en: "Landmark",
+          fr: "Repère",
+          fo: "Kennimerki",
+          de: "Erkennungszeichen"
+        }
       },
       {
-        id: "M4-11",
-        context: "Hjálp til at kenna handilin aftur",
-        da: "Butikken kan kendes på den mørke facade og det grønne Á.",
-        fo: "Handilin kennist aftur á myrku framsíðuni og grøna Á-inum.",
-        de: "Den Laden erkennt man an der dunklen Fassade und dem grünen Á."
+        key: "facadeCardTitle",
+        context: "Titel under facadefoto",
+        text: {
+          da: "Á handil udefra",
+          en: "Á handil from outside",
+          fr: "Á handil vu de l’extérieur",
+          fo: "Á handil uttanífrá",
+          de: "Á handil von außen"
+        }
       },
       {
-        id: "M4-12",
-        context: "Myndatekstur",
-        da: "Facaden på Á handil i Vestmanna",
-        fo: "Framsíðan á Á handli í Vestmanna",
-        de: "Die Fassade von Á handil in Vestmanna"
+        key: "facadeText",
+        context: "Beskrivelse under facadefoto",
+        text: {
+          da: "Billedet viser, hvordan butikken ser ud ved ankomst.",
+          en: "The image shows what the shop looks like when you arrive.",
+          fr: "L’image montre à quoi ressemble le magasin à l’arrivée.",
+          fo: "Myndin vísir, hvussu handilin sær út, tá tú kemur fram.",
+          de: "Das Bild zeigt, wie der Laden aussieht, wenn du ankommst."
+        }
       },
       {
-        id: "M4-13",
-        context: "Lítið label",
-        da: "Kendetegn",
-        fo: "Eyðkenni",
-        de: "Erkennungsmerkmal"
+        key: "hoursTitle",
+        context: "Afsnit om åbningstider",
+        text: {
+          da: "Åbningstider",
+          en: "Opening hours",
+          fr: "Horaires",
+          fo: "Upplatingartíðir",
+          de: "Öffnungszeiten"
+        }
       },
       {
-        id: "M4-14",
-        context: "Forklaring til mynd",
-        da: "Billedet viser, hvordan butikken ser ud ved ankomst.",
-        fo: "Myndin vísir, hvussu handilin sær út, tá tú kemur fram.",
-        de: "Das Bild zeigt, wie der Laden bei der Ankunft aussieht."
+        key: "hoursSub",
+        context: "Undertitel til åbningstider",
+        text: {
+          da: "Praktisk information",
+          en: "Practical information",
+          fr: "Informations pratiques",
+          fo: "Praktisk kunning",
+          de: "Praktische Informationen"
+        }
       },
       {
-        id: "M4-15",
-        context: "Yvirskrift",
-        da: "Åbningstider",
-        fo: "Upplatingartíðir",
-        de: "Öffnungszeiten"
+        key: "practicalTag",
+        context: "Tag på åbningstidskort",
+        text: {
+          da: "Praktisk info",
+          en: "Practical info",
+          fr: "Infos pratiques",
+          fo: "Praktisk kunning",
+          de: "Praktische Infos"
+        }
       },
       {
-        id: "M4-16",
-        context: "Label við upplatingartíðir",
-        da: "Praktisk information",
-        fo: "Praktisk kunning",
-        de: "Praktische Information"
+        key: "hoursOpenTitle",
+        context: "Overskrift i åbningstidskort",
+        text: {
+          da: "Butikken holder åbent",
+          en: "The shop is open",
+          fr: "Le magasin est ouvert",
+          fo: "Handilin er opin",
+          de: "Der Laden ist geöffnet"
+        }
       },
       {
-        id: "M4-17",
-        context: "Intro til upplatingartíðir",
-        da: "Butikken holder åbent",
-        fo: "Handilin hevur opið",
-        de: "Der Laden ist geöffnet"
+        key: "weekdayLabel",
+        context: "Mandag til fredag",
+        text: {
+          da: "Mandag–fredag",
+          en: "Monday–Friday",
+          fr: "Lundi–vendredi",
+          fo: "Mánadag–fríggjadag",
+          de: "Montag–Freitag"
+        }
       },
       {
-        id: "M4-18",
-        context: "Gerandisdagar",
-        da: "Mandag–lørdag: 09.00–22.00",
-        fo: "Mánadag–leygardag: 09.00–22.00",
-        de: "Montag–Samstag: 09.00–22.00"
+        key: "saturdayLabel",
+        context: "Lørdag",
+        text: {
+          da: "Lørdag",
+          en: "Saturday",
+          fr: "Samedi",
+          fo: "Leygardag",
+          de: "Samstag"
+        }
       },
       {
-        id: "M4-19",
-        context: "Sunnudagur",
-        da: "Søndag: Lukket",
-        fo: "Sunnudag: Stongt",
-        de: "Sonntag: geschlossen"
+        key: "sundayLabel",
+        context: "Søndag",
+        text: {
+          da: "Søndag",
+          en: "Sunday",
+          fr: "Dimanche",
+          fo: "Sunnudag",
+          de: "Sonntag"
+        }
       },
       {
-        id: "M4-20",
-        context: "Viðmerking um halgidagar",
-        da: "Tjek gerne hjemmesiden eller opslag ved butikken ved helligdage.",
-        fo: "Kanna gjarna heimasíðuna ella uppsløg við handilin á halgidøgum.",
-        de: "Bitte prüfe an Feiertagen die Website oder Aushänge am Laden."
+        key: "closedLabel",
+        context: "Lukket-status",
+        text: {
+          da: "Lukket",
+          en: "Closed",
+          fr: "Fermé",
+          fo: "Stongt",
+          de: "Geschlossen"
+        }
       },
       {
-        id: "M4-21",
-        context: "Yvirskrift til stutta intro",
-        da: "Et lille første indblik",
-        fo: "Eitt lítið fyrsta innlit",
-        de: "Ein kleiner erster Einblick"
+        key: "hoursNote",
+        context: "Note ved helligdage",
+        text: {
+          da: "Tjek gerne hjemmesiden eller opslag ved butikken ved helligdage.",
+          en: "Please check the website or the notice at the shop on public holidays.",
+          fr: "Veuillez vérifier le site web ou l’affiche du magasin les jours fériés.",
+          fo: "Kanna fegin heimasíðuna ella uppslagið við handilin halgidagar.",
+          de: "Bitte prüfe an Feiertagen die Website oder den Aushang beim Laden."
+        }
       },
       {
-        id: "M4-22",
-        context: "Stuttur tekstur um handilin",
-        da: "Á handil er den lokale butik i Vestmanna. Her kan du handle, spørge og få hjælp, hvis du er i tvivl om noget.",
-        fo: "Á handil er lokali handilin í Vestmanna. Her kanst tú keypa, spyrja og fáa hjálp, um tú ivast um okkurt.",
-        de: "Á handil ist der lokale Laden in Vestmanna. Hier kannst du einkaufen, fragen und Hilfe bekommen, falls du unsicher bist."
+        key: "welcomeTitle",
+        context: "Første indblik-afsnit",
+        text: {
+          da: "Et lille første indblik",
+          en: "A small first glimpse",
+          fr: "Un petit premier aperçu",
+          fo: "Eitt lítið fyrsta innlit",
+          de: "Ein erster kleiner Einblick"
+        }
       },
       {
-        id: "M4-23",
-        context: "Label",
-        da: "Lokal butik",
-        fo: "Lokalur handil",
-        de: "Lokaler Laden"
+        key: "welcomeText",
+        context: "Beskrivelse af lokal butik",
+        text: {
+          da: "Á handil er den lokale butik i Vestmanna. Her kan du handle, spørge og få hjælp, hvis du er i tvivl om noget.",
+          en: "Á handil is the local shop in Vestmanna. Here you can shop, ask questions, and get help if you are unsure about something.",
+          fr: "Á handil est le magasin local de Vestmanna. Ici, vous pouvez faire vos courses, poser des questions et obtenir de l’aide si besoin.",
+          fo: "Á handil er tann lokali handilin í Vestmanna. Her kanst tú keypa, spyrja og fáa hjálp, um tú ert í iva um okkurt.",
+          de: "Á handil ist der lokale Laden in Vestmanna. Hier kannst du einkaufen, Fragen stellen und Hilfe bekommen, wenn du unsicher bist."
+        }
       },
       {
-        id: "M4-24",
-        context: "Tekstur um handilin sum sosialt stað",
-        da: "Á handil er ikke kun et sted for indkøb. Det er også en lokal butik, hvor folk ofte stopper op, hilser og får en lille snak.",
-        fo: "Á handil er ikki bara eitt stað at keypa inn. Tað er eisini ein lokalur handil, har fólk ofta steðga á, heilsa og fáa eitt lítið prát.",
-        de: "Á handil ist nicht nur ein Ort zum Einkaufen. Es ist auch ein lokaler Laden, wo Menschen oft kurz stehen bleiben, grüßen und miteinander sprechen."
+        key: "localTag",
+        context: "Kort tag om butikken",
+        text: {
+          da: "Lokal butik",
+          en: "Local shop",
+          fr: "Magasin local",
+          fo: "Lokalur handil",
+          de: "Lokaler Laden"
+        }
       },
       {
-        id: "M4-25",
-        context: "Yvirskrift til tilboð",
-        da: "Se ugens tilbud",
-        fo: "Sí tilboðini hesa vikuna",
-        de: "Angebote der Woche ansehen"
+        key: "localTitle",
+        context: "Overskrift om hverdagsliv",
+        text: {
+          da: "En del af hverdagen i bygden",
+          en: "Part of everyday village life",
+          fr: "Une part de la vie quotidienne du village",
+          fo: "Partur av gerandisdegnum í bygdini",
+          de: "Ein Teil des Alltags im Dorf"
+        }
       },
       {
-        id: "M4-26",
-        context: "Forklaring við tilboðsblað",
-        da: "Du kan også åbne butikkens tilbudsblad. Tilbudsbladet er på færøsk.",
-        fo: "Tú kanst eisini lata tilboðsblaðið hjá handlinum upp. Tilboðsblaðið er á føroyskum.",
-        de: "Du kannst auch das Angebotsblatt des Ladens öffnen. Das Angebotsblatt ist auf Färöisch."
+        key: "localText",
+        context: "Beskrivelse af butik som lokalt mødested",
+        text: {
+          da: "Á handil er ikke kun et sted for indkøb. Det er også en lokal butik, hvor folk ofte stopper op, hilser og får en lille snak.",
+          en: "Á handil is not only a place to shop. It is also a local shop where people often stop, greet each other, and have a short chat.",
+          fr: "Á handil n’est pas seulement un lieu d’achat. C’est aussi un magasin local où les gens s’arrêtent souvent, se saluent et échangent quelques mots.",
+          fo: "Á handil er ikki bara eitt stað at keypa. Tað er eisini ein lokalur handil, har fólk ofta steðga, heilsa og fáa sær eina lítla samrøðu.",
+          de: "Á handil ist nicht nur ein Ort zum Einkaufen. Es ist auch ein lokaler Laden, wo Menschen oft kurz stehen bleiben, einander grüßen und ein paar Worte wechseln."
+        }
       },
       {
-        id: "M4-27",
-        context: "Knaptekstur",
-        da: "Åbn tilbudsblad",
-        fo: "Lat tilboðsblaðið upp",
-        de: "Angebotsblatt öffnen"
+        key: "offersTag",
+        context: "Tilbudskort tag",
+        text: {
+          da: "Tilbud",
+          en: "Offers",
+          fr: "Offres",
+          fo: "Tilboð",
+          de: "Angebote"
+        }
       },
       {
-        id: "M4-28",
-        context: "Label við leinki",
-        da: "PDF på færøsk",
-        fo: "PDF á føroyskum",
-        de: "PDF auf Färöisch"
+        key: "offersTitle",
+        context: "Tilbudskort titel",
+        text: {
+          da: "Se ugens tilbud",
+          en: "See this week’s offers",
+          fr: "Voir les offres de la semaine",
+          fo: "Sí vikunnar tilboð",
+          de: "Angebote der Woche ansehen"
+        }
       },
       {
-        id: "M4-29",
-        context: "Hjálpiseksjón",
-        da: "Har du brug for hjælp?",
-        fo: "Hevur tú tørv á hjálp?",
-        de: "Brauchst du Hilfe?"
+        key: "offersText",
+        context: "Beskrivelse af tilbudsblad",
+        text: {
+          da: "Du kan også åbne butikkens tilbudsblad. Tilbudsbladet er på færøsk.",
+          en: "You can also open the shop’s offer leaflet. The leaflet is in Faroese.",
+          fr: "Vous pouvez aussi ouvrir le prospectus des offres du magasin. Le prospectus est en féroïen.",
+          fo: "Tú kanst eisini lata upp tilboðsbløðini hjá handlinum. Tilboðsblaðið er á føroyskum.",
+          de: "Du kannst auch das Angebotsblatt des Ladens öffnen. Das Angebotsblatt ist auf Färöisch."
+        }
       },
       {
-        id: "M4-30",
-        context: "Hjálpitekstur",
-        da: "Hvis du leder efter noget bestemt eller vil vide mere om butikken, hjælper vi gerne.",
-        fo: "Um tú leitar eftir onkrum ávísum ella vilt vita meira um handilin, hjálpa vit fegin.",
-        de: "Wenn du etwas Bestimmtes suchst oder mehr über den Laden wissen möchtest, helfen wir gern."
+        key: "offersLinkTitle",
+        context: "Knap til tilbudsblad",
+        text: {
+          da: "Åbn tilbudsblad",
+          en: "Open offer leaflet",
+          fr: "Ouvrir le prospectus",
+          fo: "Lat tilboðsblaðið upp",
+          de: "Angebotsblatt öffnen"
+        }
       },
       {
-        id: "M4-31",
-        context: "Knap/leinki til heimasíðu",
-        da: "Til Á handils hjemmeside",
-        fo: "Til heimasíðuna hjá Á handli",
-        de: "Zur Website von Á handil"
+        key: "offersLinkSmall",
+        context: "Lille tekst under tilbudsblad-knap",
+        text: {
+          da: "PDF på færøsk",
+          en: "PDF in Faroese",
+          fr: "PDF en féroïen",
+          fo: "PDF á føroyskum",
+          de: "PDF auf Färöisch"
+        }
       },
       {
-        id: "M4-32",
-        context: "Forklaring við leinki",
-        da: "Mere information om butikken",
-        fo: "Meira kunning um handilin",
-        de: "Mehr Informationen über den Laden"
+        key: "helpTag",
+        context: "Hjælpekort tag",
+        text: {
+          da: "Har du brug for hjælp?",
+          en: "Need help?",
+          fr: "Besoin d’aide ?",
+          fo: "Hevur tú tørv á hjálp?",
+          de: "Brauchst du Hilfe?"
+        }
+      },
+      {
+        key: "helpTitle",
+        context: "Hjælpekort titel",
+        text: {
+          da: "Spørg os gerne",
+          en: "Feel free to ask",
+          fr: "N’hésitez pas à demander",
+          fo: "Spyr okkum endiliga",
+          de: "Frag uns gerne"
+        }
+      },
+      {
+        key: "helpText",
+        context: "Hjælpetekst",
+        text: {
+          da: "Hvis du leder efter noget bestemt eller vil vide mere om butikken, hjælper vi gerne.",
+          en: "If you are looking for something specific or want to know more about the shop, we are happy to help.",
+          fr: "Si vous cherchez quelque chose de précis ou si vous voulez en savoir plus sur le magasin, nous serons heureux de vous aider.",
+          fo: "Um tú leitar eftir nøkrum ávísum ella vilt vita meira um handilin, hjálpa vit fegin.",
+          de: "Wenn du etwas Bestimmtes suchst oder mehr über den Laden wissen möchtest, helfen wir gerne."
+        }
+      },
+      {
+        key: "siteLinkTitle",
+        context: "Knap til hjemmeside",
+        text: {
+          da: "Til Á handils hjemmeside",
+          en: "Go to Á handil website",
+          fr: "Aller au site web de Á handil",
+          fo: "Til heimasíðuna hjá Á handli",
+          de: "Zur Website von Á handil"
+        }
+      },
+      {
+        key: "siteLinkSmall",
+        context: "Lille tekst under hjemmeside-knap",
+        text: {
+          da: "Mere information om butikken",
+          en: "More information about the shop",
+          fr: "Plus d’informations sur le magasin",
+          fo: "Meira kunning um handilin",
+          de: "Weitere Informationen über den Laden"
+        }
       }
     ];
 
-    function m4EscapeHTML(str) {
-      return String(str || "")
+    function cloneData(data) {
+      return JSON.parse(JSON.stringify(data));
+    }
+
+    function getInitialData() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch (error) {
+          console.warn("Kunne ikke læse gemte data", error);
+        }
+      }
+
+      return sourceStrings.map(item => ({
+        ...cloneData(item),
+        status: "needs-review",
+        comment: "",
+        edited: cloneData(item.text)
+      }));
+    }
+
+    let data = getInitialData();
+
+    const stringsEl = document.getElementById("strings");
+    const emptyEl = document.getElementById("empty");
+    const searchInput = document.getElementById("searchInput");
+    const languageFilter = document.getElementById("languageFilter");
+    const statusFilter = document.getElementById("statusFilter");
+    const countVisible = document.getElementById("countVisible");
+    const countApproved = document.getElementById("countApproved");
+    const countIssues = document.getElementById("countIssues");
+
+    function saveData() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function getFilteredData() {
+      const query = searchInput.value.trim().toLowerCase();
+      const status = statusFilter.value;
+      const lang = languageFilter.value;
+
+      return data.filter(item => {
+        const statusMatch = status === "all" || item.status === status || (status === "issue" && item.comment.trim());
+        const haystackParts = [item.key, item.context, item.comment];
+
+        languages.forEach(language => {
+          if (lang === "all" || lang === language.code) {
+            haystackParts.push(item.text[language.code] || "");
+            haystackParts.push(item.edited[language.code] || "");
+          }
+        });
+
+        const queryMatch = !query || haystackParts.join(" ").toLowerCase().includes(query);
+        return statusMatch && queryMatch;
+      });
+    }
+
+    function escapeHtml(value) {
+      return String(value || "")
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;");
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
 
-    function m4Today() {
-      return new Date().toISOString().slice(0, 10);
-    }
+    function render() {
+      const filtered = getFilteredData();
+      const chosenLanguage = languageFilter.value;
 
-    function m4Render() {
-      const list = document.getElementById("m4-list");
+      stringsEl.innerHTML = filtered.map((item) => {
+        const originalIndex = data.findIndex(row => row.key === item.key);
+        const visibleLanguages = chosenLanguage === "all"
+          ? languages
+          : languages.filter(language => language.code === chosenLanguage);
 
-      list.innerHTML = m4Sentences.map(item => `
-        <article class="m4-row" data-id="${item.id}">
-          <div class="m4-left">
-            <div class="m4-id">${item.id}</div>
-            <div class="m4-context">${m4EscapeHTML(item.context)}</div>
-          </div>
-
-          <div class="m4-right">
-            <div class="m4-text-main">${m4EscapeHTML(item.da)}</div>
-
-            <div class="m4-translations">
-              <div class="m4-translation">
-                <strong>Føroyskt</strong>
-                ${m4EscapeHTML(item.fo)}
+        return `
+          <article class="string-card" data-key="${escapeHtml(item.key)}">
+            <div class="string-head">
+              <div>
+                <div class="key">${escapeHtml(item.key)}</div>
+                <div class="context">${escapeHtml(item.context)}</div>
               </div>
-
-              <div class="m4-translation">
-                <strong>Deutsch</strong>
-                ${m4EscapeHTML(item.de)}
-              </div>
+              <select data-action="status" data-index="${originalIndex}" aria-label="Status for ${escapeHtml(item.key)}">
+                <option value="needs-review" ${item.status === "needs-review" ? "selected" : ""}>Skal tjekkes</option>
+                <option value="approved" ${item.status === "approved" ? "selected" : ""}>Godkendt</option>
+              </select>
             </div>
 
-            <div class="m4-buttons">
-              ${m4Choices.map(choice => `
-                <button class="m4-choice" type="button" data-choice="${m4EscapeHTML(choice)}">
-                  ${m4EscapeHTML(choice)}
-                </button>
+            <div class="grid">
+              ${visibleLanguages.map(language => `
+                <div class="cell">
+                  <label>
+                    <span>${escapeHtml(language.label)}</span>
+                    <span>${escapeHtml(language.code.toUpperCase())}</span>
+                  </label>
+                  <div class="source-text">${escapeHtml(item.text[language.code])}</div>
+                  <textarea data-action="edit" data-index="${originalIndex}" data-lang="${language.code}" aria-label="Ret ${language.label} for ${escapeHtml(item.key)}">${escapeHtml(item.edited[language.code])}</textarea>
+                </div>
               `).join("")}
             </div>
 
-            <div class="m4-comment">
-              <label for="${item.id}-comment">Viðmerking / forslag</label>
-              <textarea id="${item.id}-comment" data-comment placeholder="Skriva viðmerking her, um tú vilt."></textarea>
+            <div class="status-row">
+              <div>
+                <strong>Kommentar</strong>
+                <div class="context">Skriv fx “ok”, “lyder forkert”, “skal være mere høfligt” osv.</div>
+              </div>
+              <textarea data-action="comment" data-index="${originalIndex}" aria-label="Kommentar for ${escapeHtml(item.key)}">${escapeHtml(item.comment)}</textarea>
             </div>
-          </div>
-        </article>
-      `).join("");
+          </article>
+        `;
+      }).join("");
 
-      document.getElementById("m4-date").value = m4Today();
-
-      document.querySelectorAll(".m4-choice").forEach(btn => {
-        btn.addEventListener("click", function () {
-          btn.classList.toggle("active");
-          m4AutoSave();
-        });
-      });
-
-      document.querySelectorAll("#m4-simple-language-test textarea, #m4-simple-language-test input")
-        .forEach(el => {
-          el.addEventListener("input", m4AutoSave);
-          el.addEventListener("change", m4AutoSave);
-        });
-
-      m4Load();
+      emptyEl.classList.toggle("visible", filtered.length === 0);
+      countVisible.textContent = filtered.length;
+      countApproved.textContent = data.filter(item => item.status === "approved").length;
+      countIssues.textContent = data.filter(item => item.comment.trim()).length;
     }
 
-    function m4Collect() {
-      return {
-        project: "M4 – enkel sproglig mikrotest",
-        savedAt: new Date().toISOString(),
-        reviewer: document.getElementById("m4-reviewer").value || "",
-        date: document.getElementById("m4-date").value || "",
-        focus: document.getElementById("m4-focus").value || "",
-        items: m4Sentences.map(item => {
-          const row = document.querySelector(`[data-id="${item.id}"]`);
-          const selected = Array.from(row.querySelectorAll(".m4-choice.active")).map(btn => btn.dataset.choice);
+    stringsEl.addEventListener("input", (event) => {
+      const target = event.target;
+      const index = Number(target.dataset.index);
+      const action = target.dataset.action;
+      if (!Number.isInteger(index) || !data[index]) return;
 
-          return {
-            id: item.id,
-            context: item.context,
-            danish: item.da,
-            faroese: item.fo,
-            german: item.de,
-            selected: selected,
-            comment: row.querySelector("[data-comment]").value || ""
-          };
-        })
-      };
-    }
-
-    function m4Save() {
-      const data = m4Collect();
-      localStorage.setItem(m4StorageKey, JSON.stringify(data));
-      document.getElementById("m4-status").textContent = "Gemt lokalt " + new Date().toLocaleTimeString("da-DK");
-    }
-
-    let m4Timer = null;
-    function m4AutoSave() {
-      clearTimeout(m4Timer);
-      m4Timer = setTimeout(m4Save, 400);
-    }
-
-    function m4Load() {
-      const raw = localStorage.getItem(m4StorageKey);
-      if (!raw) return;
-
-      try {
-        const data = JSON.parse(raw);
-
-        document.getElementById("m4-reviewer").value = data.reviewer || "";
-        document.getElementById("m4-date").value = data.date || m4Today();
-        document.getElementById("m4-focus").value = data.focus || "";
-
-        (data.items || []).forEach(saved => {
-          const row = document.querySelector(`[data-id="${saved.id}"]`);
-          if (!row) return;
-
-          row.querySelector("[data-comment]").value = saved.comment || "";
-
-          row.querySelectorAll(".m4-choice").forEach(btn => {
-            if ((saved.selected || []).includes(btn.dataset.choice)) {
-              btn.classList.add("active");
-            }
-          });
-        });
-
-        document.getElementById("m4-status").textContent = "Tidligere lokal gemning indlæst";
-      } catch (e) {
-        document.getElementById("m4-status").textContent = "Kunne ikke indlæse lokal gemning";
+      if (action === "edit") {
+        data[index].edited[target.dataset.lang] = target.value;
       }
+
+      if (action === "comment") {
+        data[index].comment = target.value;
+      }
+
+      saveData();
+      updateCountsOnly();
+    });
+
+    stringsEl.addEventListener("change", (event) => {
+      const target = event.target;
+      const index = Number(target.dataset.index);
+      if (target.dataset.action === "status" && data[index]) {
+        data[index].status = target.value;
+        saveData();
+        render();
+      }
+    });
+
+    function updateCountsOnly() {
+      countApproved.textContent = data.filter(item => item.status === "approved").length;
+      countIssues.textContent = data.filter(item => item.comment.trim()).length;
     }
 
-    function m4Download(filename, content, type) {
-      const blob = new Blob([content], { type: type });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
+    function rowsForExport() {
+      return data.map(item => ({
+        key: item.key,
+        context: item.context,
+        status: item.status,
+        comment: item.comment,
+        da_original: item.text.da,
+        da_reviewed: item.edited.da,
+        en_original: item.text.en,
+        en_reviewed: item.edited.en,
+        fr_original: item.text.fr,
+        fr_reviewed: item.edited.fr,
+        fo_original: item.text.fo,
+        fo_reviewed: item.edited.fo,
+        de_original: item.text.de,
+        de_reviewed: item.edited.de
+      }));
     }
 
-    function m4DownloadJSON() {
-      const data = m4Collect();
-      const name = "M4-ordtest-A-handil-" + (data.date || m4Today()) + ".json";
-      m4Download(name, JSON.stringify(data, null, 2), "application/json;charset=utf-8");
+    function downloadExcel() {
+      const worksheet = XLSX.utils.json_to_sheet(rowsForExport());
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sprogtjek");
+      XLSX.writeFile(workbook, "ahandil-sprogtjek.xlsx");
     }
 
-    function m4CSVCell(value) {
-      const v = Array.isArray(value) ? value.join(", ") : String(value || "");
-      return '"' + v.replaceAll('"', '""') + '"';
-    }
-
-    function m4DownloadCSV() {
-      const data = m4Collect();
-
-      const rows = [
+    function downloadPdf() {
+      const body = [
         [
-          "id",
-          "context",
-          "danish",
-          "faroese",
-          "german",
-          "selected",
-          "comment",
-          "reviewer",
-          "date",
-          "focus"
-        ]
+          { text: "Key", bold: true },
+          { text: "Status", bold: true },
+          { text: "Kommentar", bold: true },
+          { text: "DA", bold: true },
+          { text: "EN", bold: true },
+          { text: "FR", bold: true },
+          { text: "FO", bold: true },
+          { text: "DE", bold: true }
+        ],
+        ...data.map(item => [
+          item.key,
+          item.status,
+          item.comment || "",
+          item.edited.da || "",
+          item.edited.en || "",
+          item.edited.fr || "",
+          item.edited.fo || "",
+          item.edited.de || ""
+        ])
       ];
 
-      data.items.forEach(item => {
-        rows.push([
-          item.id,
-          item.context,
-          item.danish,
-          item.faroese,
-          item.german,
-          item.selected,
-          item.comment,
-          data.reviewer,
-          data.date,
-          data.focus
-        ]);
-      });
+      const docDefinition = {
+        pageOrientation: "landscape",
+        pageSize: "A4",
+        pageMargins: [24, 28, 24, 28],
+        defaultStyle: {
+          font: "Roboto",
+          fontSize: 7
+        },
+        content: [
+          { text: "Á handil · sprogtjek", fontSize: 16, bold: true, margin: [0, 0, 0, 4] },
+          { text: `Eksporteret: ${new Date().toLocaleString("da-DK")}`, fontSize: 8, margin: [0, 0, 0, 12] },
+          {
+            table: {
+              headerRows: 1,
+              widths: [70, 55, 105, "*", "*", "*", "*", "*"],
+              body
+            },
+            layout: {
+              fillColor: function (rowIndex) {
+                return rowIndex === 0 ? "#eef7ea" : null;
+              },
+              hLineColor: function () { return "#dddddd"; },
+              vLineColor: function () { return "#dddddd"; }
+            }
+          }
+        ]
+      };
 
-      const csv = rows.map(row => row.map(m4CSVCell).join(";")).join("\n");
-      const name = "M4-ordtest-A-handil-" + (data.date || m4Today()) + ".csv";
-      m4Download(name, csv, "text/csv;charset=utf-8");
+      pdfMake.createPdf(docDefinition).download("ahandil-sprogtjek.pdf");
     }
 
-    function m4Clear() {
-      const ok = confirm("Vil du nulstille alle lokale svar?");
-      if (!ok) return;
+    searchInput.addEventListener("input", render);
+    languageFilter.addEventListener("change", render);
+    statusFilter.addEventListener("change", render);
 
-      localStorage.removeItem(m4StorageKey);
+    document.getElementById("saveButton").addEventListener("click", () => {
+      saveData();
+      alert("Gemt i denne browser.");
+    });
 
-      document.querySelectorAll(".m4-choice.active").forEach(btn => btn.classList.remove("active"));
-      document.querySelectorAll("[data-comment]").forEach(area => area.value = "");
-      document.getElementById("m4-reviewer").value = "";
-      document.getElementById("m4-focus").value = "";
-      document.getElementById("m4-date").value = m4Today();
-      document.getElementById("m4-status").textContent = "Nulstillet";
-    }
+    document.getElementById("excelButton").addEventListener("click", downloadExcel);
+    document.getElementById("pdfButton").addEventListener("click", downloadPdf);
 
-    m4Render();
+    document.getElementById("resetButton").addEventListener("click", () => {
+      if (!confirm("Vil du nulstille alle rettelser og kommentarer?")) return;
+      localStorage.removeItem(STORAGE_KEY);
+      data = getInitialData();
+      render();
+    });
+
+    render();
   </script>
-</section>
+</body>
+</html>
