@@ -16,17 +16,23 @@
 
   <style>
     :root {
-      --bg: #f4eee4;
-      --card: #fffdfa;
-      --green: #50af31;
-      --green-dark: #3f8c27;
-      --green-soft: #eef7ea;
-      --red: #ef4b45;
-      --text: #2f3133;
-      --muted: #6c7176;
-      --line: rgba(0,0,0,0.1);
-      --shadow: 0 12px 28px rgba(0,0,0,0.08);
-      --radius: 22px;
+      --bg: #f7f0df;
+      --paper: #fffaf0;
+      --card: #fffdf7;
+      --ink: #151515;
+      --muted: #4e4e4e;
+      --green: #61d836;
+      --green-dark: #1f7c20;
+      --yellow: #ffd947;
+      --pink: #ff7ab6;
+      --blue: #79c7ff;
+      --red: #ff4b3e;
+      --white: #ffffff;
+      --border: 3px solid var(--ink);
+      --border-thin: 2px solid var(--ink);
+      --shadow: 7px 7px 0 var(--ink);
+      --shadow-small: 4px 4px 0 var(--ink);
+      --radius: 18px;
       font-family: "Open Sans", Arial, sans-serif;
     }
 
@@ -34,106 +40,224 @@
 
     body {
       margin: 0;
-      background: linear-gradient(180deg, #fbf7ef 0%, #f4edde 100%);
-      color: var(--text);
+      background:
+        radial-gradient(circle at 16px 16px, rgba(21,21,21,0.12) 2px, transparent 2px),
+        linear-gradient(180deg, #fff3c7 0%, var(--bg) 56%, #f0e5cf 100%);
+      background-size: 34px 34px, auto;
+      color: var(--ink);
       font-family: "Open Sans", Arial, sans-serif;
     }
 
     .page {
-      width: min(1180px, calc(100% - 28px));
-      margin: 28px auto;
+      width: min(1240px, calc(100% - 28px));
+      margin: 28px auto 42px;
     }
 
     .hero {
-      background: linear-gradient(135deg, rgba(80,175,49,0.98), rgba(55,124,36,0.96));
-      color: white;
-      border-radius: 28px;
-      padding: 28px;
-      box-shadow: 0 20px 40px rgba(50,90,40,0.18);
+      background: var(--green);
+      color: var(--ink);
+      border: var(--border);
+      border-radius: 26px;
+      padding: clamp(20px, 4vw, 34px);
+      box-shadow: var(--shadow);
       display: grid;
       gap: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -50px;
+      top: -60px;
+      width: 190px;
+      height: 190px;
+      border: var(--border);
+      background: var(--yellow);
+      transform: rotate(12deg);
+      border-radius: 34px;
+    }
+
+    .hero h1,
+    .hero p,
+    .hero .hero-tags {
+      position: relative;
+      z-index: 1;
     }
 
     .hero h1 {
       margin: 0;
-      font-size: clamp(1.65rem, 4vw, 2.45rem);
-      line-height: 1.05;
+      max-width: 900px;
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 0.98;
+      letter-spacing: -0.06em;
+      font-weight: 800;
+      text-transform: uppercase;
     }
 
     .hero p {
       margin: 0;
-      max-width: 760px;
-      color: rgba(255,255,255,0.92);
+      max-width: 820px;
+      color: var(--ink);
       line-height: 1.55;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border: var(--border-thin);
+      background: var(--paper);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      box-shadow: 3px 3px 0 var(--ink);
     }
 
     .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      justify-content: space-between;
-      margin: 18px 0;
+      display: grid;
+      gap: 12px;
+      margin: 24px 0 18px;
       padding: 14px;
-      background: rgba(255,255,255,0.72);
-      border: 1px solid var(--line);
+      background: var(--paper);
+      border: var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       position: sticky;
       top: 10px;
       z-index: 20;
-      backdrop-filter: blur(18px);
     }
 
-    .toolbar-left,
-    .toolbar-right {
+    .toolbar-top,
+    .toolbar-bottom {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .toolbar-group {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       align-items: center;
     }
 
+    .field-group {
+      display: grid;
+      gap: 5px;
+    }
+
+    .field-group span {
+      font-size: 0.72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
     input[type="search"], select {
-      border: 1px solid var(--line);
-      background: white;
-      border-radius: 999px;
-      padding: 11px 14px;
-      min-height: 42px;
+      border: var(--border-thin);
+      background: var(--white);
+      border-radius: 12px;
+      padding: 10px 12px;
+      min-height: 44px;
       font: inherit;
-      color: var(--text);
+      color: var(--ink);
+      font-weight: 800;
+      box-shadow: var(--shadow-small);
     }
 
     input[type="search"] {
-      width: min(360px, 100%);
+      width: min(420px, 100%);
+    }
+
+    select {
+      min-width: 185px;
     }
 
     button {
-      border: 0;
-      min-height: 42px;
-      border-radius: 999px;
+      border: var(--border-thin);
+      min-height: 44px;
+      border-radius: 12px;
       padding: 10px 15px;
       background: var(--green);
-      color: white;
-      font-weight: 800;
+      color: var(--ink);
+      font-weight: 900;
       cursor: pointer;
       font-family: inherit;
+      box-shadow: var(--shadow-small);
+      transform: translate(0, 0);
+      transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+    }
+
+    button:hover {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 var(--ink);
     }
 
     button.secondary {
-      background: white;
-      color: var(--green-dark);
-      border: 1px solid rgba(63,140,39,0.22);
+      background: var(--blue);
+      color: var(--ink);
     }
 
     button.danger {
       background: var(--red);
+      color: var(--white);
+    }
+
+    .language-checks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px;
+      background: #fff;
+      border: var(--border-thin);
+      border-radius: 14px;
+      box-shadow: var(--shadow-small);
+    }
+
+    .language-checks label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 10px;
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      background: var(--paper);
+      font-size: 0.86rem;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .language-checks input {
+      accent-color: var(--green-dark);
+      width: 18px;
+      height: 18px;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+      line-height: 1.35;
     }
 
     .meta {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }
 
     .pill {
@@ -141,23 +265,32 @@
       gap: 8px;
       align-items: center;
       border-radius: 999px;
-      background: white;
-      border: 1px solid var(--line);
+      background: var(--white);
+      border: var(--border-thin);
       padding: 8px 12px;
-      color: var(--muted);
+      color: var(--ink);
       font-size: 0.9rem;
-      font-weight: 700;
+      font-weight: 900;
+      box-shadow: 3px 3px 0 var(--ink);
+    }
+
+    .pill strong {
+      background: var(--yellow);
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      padding: 2px 8px;
+      line-height: 1.2;
     }
 
     .layout {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 16px;
+      gap: 18px;
     }
 
     .string-card {
       background: var(--card);
-      border: 1px solid rgba(0,0,0,0.07);
+      border: var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       overflow: hidden;
@@ -167,37 +300,52 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
-      gap: 8px;
+      gap: 10px;
       padding: 14px 16px;
-      border-bottom: 1px solid rgba(0,0,0,0.06);
-      background: rgba(255,255,255,0.72);
+      border-bottom: var(--border-thin);
+      background: var(--yellow);
     }
 
     .key {
-      font-weight: 800;
-      color: var(--green-dark);
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      background: var(--ink);
+      color: var(--white);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
     }
 
     .context {
-      color: var(--muted);
+      color: var(--ink);
       font-size: 0.9rem;
       line-height: 1.4;
+      margin-top: 5px;
+      font-weight: 700;
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 1px;
-      background: rgba(0,0,0,0.06);
+      grid-template-columns: repeat(var(--visible-count, 2), minmax(0, 1fr));
+      gap: 0;
+      background: var(--ink);
+      border-bottom: var(--border-thin);
     }
 
     .cell {
       background: var(--card);
-      padding: 12px;
-      min-height: 150px;
+      padding: 13px;
+      min-height: 178px;
       display: grid;
       align-content: start;
-      gap: 8px;
+      gap: 9px;
+      border-right: var(--border-thin);
+    }
+
+    .cell:last-child {
+      border-right: 0;
     }
 
     .cell label {
@@ -205,38 +353,69 @@
       justify-content: space-between;
       gap: 8px;
       align-items: center;
-      font-size: 0.78rem;
-      font-weight: 800;
-      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 900;
+      color: var(--ink);
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
 
+    .label-left {
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .primary-badge,
+    .compare-badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 3px 7px;
+      border: 2px solid var(--ink);
+      color: var(--ink);
+      font-size: 0.66rem;
+      font-weight: 900;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .primary-badge { background: var(--green); }
+    .compare-badge { background: var(--pink); }
+
     .source-text {
-      color: var(--text);
+      color: var(--ink);
       line-height: 1.45;
       font-size: 0.95rem;
       white-space: pre-wrap;
+      font-weight: 700;
+      padding: 9px;
+      border: 2px dashed rgba(21,21,21,0.42);
+      border-radius: 12px;
+      background: #fff8df;
     }
 
     textarea {
       width: 100%;
-      min-height: 92px;
+      min-height: 98px;
       resize: vertical;
-      border: 1px solid rgba(0,0,0,0.11);
-      border-radius: 14px;
+      border: var(--border-thin);
+      border-radius: 12px;
       padding: 10px;
-      background: #fff;
-      color: var(--text);
+      background: var(--white);
+      color: var(--ink);
       font: inherit;
       line-height: 1.45;
+      font-weight: 700;
+      box-shadow: 3px 3px 0 var(--ink);
     }
 
     textarea:focus,
     input:focus,
     select:focus {
-      outline: 3px solid rgba(80,175,49,0.18);
-      border-color: rgba(80,175,49,0.55);
+      outline: 4px solid var(--pink);
+      border-color: var(--ink);
     }
 
     .status-row {
@@ -244,81 +423,152 @@
       grid-template-columns: 220px 1fr;
       gap: 12px;
       padding: 14px 16px;
-      border-top: 1px solid rgba(0,0,0,0.06);
-      background: rgba(255,255,255,0.58);
+      background: var(--blue);
     }
 
     .status-row textarea {
-      min-height: 70px;
+      min-height: 74px;
     }
 
     .empty {
       display: none;
       text-align: center;
       padding: 34px;
-      color: var(--muted);
-      background: white;
+      color: var(--ink);
+      background: var(--white);
       border-radius: var(--radius);
-      border: 1px solid var(--line);
+      border: var(--border);
+      box-shadow: var(--shadow);
+      font-weight: 900;
     }
 
     .empty.visible { display: block; }
 
-    @media (max-width: 980px) {
+    @media (max-width: 1100px) {
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .cell:nth-child(2n) {
+        border-right: 0;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        width: min(100% - 18px, 1240px);
+        margin-top: 16px;
+      }
+
+      .hero,
+      .toolbar,
+      .string-card,
+      .empty {
+        box-shadow: 5px 5px 0 var(--ink);
+      }
+
+      .toolbar {
+        position: static;
+      }
+
       .grid {
         grid-template-columns: 1fr;
       }
 
       .cell {
         min-height: auto;
+        border-right: 0;
+        border-bottom: var(--border-thin);
+      }
+
+      .cell:last-child {
+        border-bottom: 0;
       }
 
       .status-row {
         grid-template-columns: 1fr;
       }
+
+      input[type="search"], select {
+        width: 100%;
+      }
+
+      .toolbar-group,
+      .toolbar-top,
+      .toolbar-bottom {
+        width: 100%;
+      }
     }
 
     @media print {
-      .toolbar { display: none; }
       body { background: white; }
+      .toolbar { display: none; }
       .page { width: 100%; margin: 0; }
-      .hero { box-shadow: none; }
-      .string-card { break-inside: avoid; box-shadow: none; }
-      textarea { border: 1px solid #ddd; }
+      .hero, .string-card, .empty, .pill, textarea, input, select { box-shadow: none; }
+      .hero { border-radius: 0; }
+      .hero::after { display: none; }
+      .string-card { break-inside: avoid; }
+      textarea { border: 1px solid #999; }
     }
   </style>
 </head>
+
 <body>
   <main class="page">
     <section class="hero">
       <h1>Á handil · sprogtjek</h1>
-      <p>Brug siden som et enkelt localization-værktøj: ret eller kommentér oversættelserne, filtrér efter sprog/status og download arbejdet som Excel eller PDF.</p>
+      <p>Et mere tydeligt localization-værktøj: vælg et primært sprog, vælg 2–4 sprog i alt, ret eller kommentér teksterne, og download arbejdet som Excel eller PDF.</p>
+      <div class="hero-tags" aria-label="Funktioner">
+        <span class="tag">Primary language</span>
+        <span class="tag">2–4 languages</span>
+        <span class="tag">Excel + PDF</span>
+      </div>
     </section>
 
     <section class="toolbar" aria-label="Værktøjslinje">
-      <div class="toolbar-left">
-        <input id="searchInput" type="search" placeholder="Søg efter key, tekst eller kommentar…" />
-        <select id="languageFilter" aria-label="Filtrér efter sprog">
-          <option value="all">Alle sprog</option>
-          <option value="da">Dansk</option>
-          <option value="en">English</option>
-          <option value="fr">Français</option>
-          <option value="fo">Føroyskt</option>
-          <option value="de">Deutsch</option>
-        </select>
-        <select id="statusFilter" aria-label="Filtrér efter status">
-          <option value="all">Alle statusser</option>
-          <option value="needs-review">Skal tjekkes</option>
-          <option value="approved">Godkendt</option>
-          <option value="issue">Har kommentar</option>
-        </select>
+      <div class="toolbar-top">
+        <div class="toolbar-group">
+          <div class="field-group">
+            <span>Søg</span>
+            <input id="searchInput" type="search" placeholder="Søg efter key, tekst eller kommentar…" />
+          </div>
+
+          <div class="field-group">
+            <span>Primært sprog</span>
+            <select id="primaryLanguage" aria-label="Primært sprog">
+              <option value="da">Dansk</option>
+              <option value="en">English</option>
+              <option value="fr">Français</option>
+              <option value="fo">Føroyskt</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <span>Status</span>
+            <select id="statusFilter" aria-label="Filtrér efter status">
+              <option value="all">Alle statusser</option>
+              <option value="needs-review">Skal tjekkes</option>
+              <option value="approved">Godkendt</option>
+              <option value="issue">Har kommentar</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="toolbar-group">
+          <button type="button" class="secondary" id="saveButton">Gem i browser</button>
+          <button type="button" id="excelButton">Download Excel</button>
+          <button type="button" id="pdfButton">Download PDF</button>
+          <button type="button" class="danger" id="resetButton">Nulstil</button>
+        </div>
       </div>
 
-      <div class="toolbar-right">
-        <button type="button" class="secondary" id="saveButton">Gem i browser</button>
-        <button type="button" id="excelButton">Download Excel</button>
-        <button type="button" id="pdfButton">Download PDF</button>
-        <button type="button" class="danger" id="resetButton">Nulstil</button>
+      <div class="toolbar-bottom">
+        <div class="field-group">
+          <span>Synlige sprog</span>
+          <div id="languageChecks" class="language-checks" aria-label="Vælg synlige sprog"></div>
+          <div class="hint">Vælg mindst 2 og højst 4 sprog. Det primære sprog bliver altid vist.</div>
+        </div>
       </div>
     </section>
 
@@ -326,6 +576,7 @@
       <span class="pill"><strong id="countVisible">0</strong> viste strenge</span>
       <span class="pill"><strong id="countApproved">0</strong> godkendt</span>
       <span class="pill"><strong id="countIssues">0</strong> med kommentar</span>
+      <span class="pill"><strong id="countLanguages">0</strong> valgte sprog</span>
     </section>
 
     <section id="strings" class="layout"></section>
@@ -333,7 +584,10 @@
   </main>
 
   <script>
-    const STORAGE_KEY = "ahandil-localize-review-v1";
+    const STORAGE_KEY = "ahandil-localize-review-v3-neo-brutal";
+    const SETTINGS_KEY = "ahandil-localize-review-settings-v1";
+    const MIN_LANGUAGES = 2;
+    const MAX_LANGUAGES = 4;
 
     const languages = [
       { code: "da", label: "Dansk" },
@@ -742,12 +996,13 @@
       }
     ];
 
-    function cloneData(data) {
-      return JSON.parse(JSON.stringify(data));
+    function cloneData(value) {
+      return JSON.parse(JSON.stringify(value));
     }
 
     function getInitialData() {
       const saved = localStorage.getItem(STORAGE_KEY);
+
       if (saved) {
         try {
           return JSON.parse(saved);
@@ -764,38 +1019,137 @@
       }));
     }
 
+    function getInitialSettings() {
+      const fallback = {
+        primaryLanguage: "da",
+        visibleLanguages: ["da", "fo"]
+      };
+
+      const saved = localStorage.getItem(SETTINGS_KEY);
+      if (!saved) return fallback;
+
+      try {
+        const parsed = JSON.parse(saved);
+        const validCodes = languages.map(language => language.code);
+        const primaryLanguage = validCodes.includes(parsed.primaryLanguage)
+          ? parsed.primaryLanguage
+          : fallback.primaryLanguage;
+        const visibleLanguages = Array.isArray(parsed.visibleLanguages)
+          ? parsed.visibleLanguages.filter(code => validCodes.includes(code))
+          : fallback.visibleLanguages;
+
+        return normalizeSettings({ primaryLanguage, visibleLanguages });
+      } catch (error) {
+        console.warn("Kunne ikke læse gemte indstillinger", error);
+        return fallback;
+      }
+    }
+
+    function normalizeSettings(settings) {
+      const validCodes = languages.map(language => language.code);
+      let primaryLanguage = validCodes.includes(settings.primaryLanguage)
+        ? settings.primaryLanguage
+        : languages[0].code;
+
+      let visibleLanguages = Array.from(new Set(settings.visibleLanguages || []))
+        .filter(code => validCodes.includes(code));
+
+      if (!visibleLanguages.includes(primaryLanguage)) {
+        visibleLanguages.unshift(primaryLanguage);
+      }
+
+      while (visibleLanguages.length < MIN_LANGUAGES) {
+        const nextLanguage = validCodes.find(code => !visibleLanguages.includes(code));
+        if (!nextLanguage) break;
+        visibleLanguages.push(nextLanguage);
+      }
+
+      if (visibleLanguages.length > MAX_LANGUAGES) {
+        visibleLanguages = [
+          primaryLanguage,
+          ...visibleLanguages.filter(code => code !== primaryLanguage)
+        ].slice(0, MAX_LANGUAGES);
+      }
+
+      return { primaryLanguage, visibleLanguages };
+    }
+
     let data = getInitialData();
+    let settings = getInitialSettings();
 
     const stringsEl = document.getElementById("strings");
     const emptyEl = document.getElementById("empty");
     const searchInput = document.getElementById("searchInput");
-    const languageFilter = document.getElementById("languageFilter");
+    const primaryLanguage = document.getElementById("primaryLanguage");
     const statusFilter = document.getElementById("statusFilter");
+    const languageChecks = document.getElementById("languageChecks");
     const countVisible = document.getElementById("countVisible");
     const countApproved = document.getElementById("countApproved");
     const countIssues = document.getElementById("countIssues");
+    const countLanguages = document.getElementById("countLanguages");
 
     function saveData() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     }
 
+    function saveSettings() {
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    }
+
+    function languageByCode(code) {
+      return languages.find(language => language.code === code);
+    }
+
+    function getChosenLanguages() {
+      settings = normalizeSettings(settings);
+      return settings.visibleLanguages
+        .map(code => languageByCode(code))
+        .filter(Boolean)
+        .map(language => ({
+          ...language,
+          role: language.code === settings.primaryLanguage ? "primary" : "secondary"
+        }));
+    }
+
+    function renderLanguageControls() {
+      settings = normalizeSettings(settings);
+      primaryLanguage.value = settings.primaryLanguage;
+
+      languageChecks.innerHTML = languages.map(language => {
+        const checked = settings.visibleLanguages.includes(language.code) ? "checked" : "";
+        const disabled = language.code === settings.primaryLanguage ? "disabled" : "";
+
+        return `
+          <label>
+            <input type="checkbox" value="${escapeHtml(language.code)}" ${checked} ${disabled}>
+            ${escapeHtml(language.label)}
+          </label>
+        `;
+      }).join("");
+    }
+
     function getFilteredData() {
       const query = searchInput.value.trim().toLowerCase();
       const status = statusFilter.value;
-      const lang = languageFilter.value;
+      const chosenLanguages = getChosenLanguages();
 
       return data.filter(item => {
-        const statusMatch = status === "all" || item.status === status || (status === "issue" && item.comment.trim());
+        const statusMatch =
+          status === "all" ||
+          item.status === status ||
+          (status === "issue" && item.comment.trim());
+
         const haystackParts = [item.key, item.context, item.comment];
 
-        languages.forEach(language => {
-          if (lang === "all" || lang === language.code) {
-            haystackParts.push(item.text[language.code] || "");
-            haystackParts.push(item.edited[language.code] || "");
-          }
+        chosenLanguages.forEach(language => {
+          haystackParts.push(item.text[language.code] || "");
+          haystackParts.push(item.edited[language.code] || "");
         });
 
-        const queryMatch = !query || haystackParts.join(" ").toLowerCase().includes(query);
+        const queryMatch =
+          !query ||
+          haystackParts.join(" ").toLowerCase().includes(query);
+
         return statusMatch && queryMatch;
       });
     }
@@ -810,14 +1164,15 @@
     }
 
     function render() {
+      renderLanguageControls();
+
       const filtered = getFilteredData();
-      const chosenLanguage = languageFilter.value;
+      const visibleLanguages = getChosenLanguages();
+
+      stringsEl.style.setProperty("--visible-count", String(visibleLanguages.length));
 
       stringsEl.innerHTML = filtered.map((item) => {
         const originalIndex = data.findIndex(row => row.key === item.key);
-        const visibleLanguages = chosenLanguage === "all"
-          ? languages
-          : languages.filter(language => language.code === chosenLanguage);
 
         return `
           <article class="string-card" data-key="${escapeHtml(item.key)}">
@@ -836,7 +1191,10 @@
               ${visibleLanguages.map(language => `
                 <div class="cell">
                   <label>
-                    <span>${escapeHtml(language.label)}</span>
+                    <span class="label-left">
+                      ${escapeHtml(language.label)}
+                      ${language.role === "primary" ? '<span class="primary-badge">Primary</span>' : '<span class="compare-badge">Check</span>'}
+                    </span>
                     <span>${escapeHtml(language.code.toUpperCase())}</span>
                   </label>
                   <div class="source-text">${escapeHtml(item.text[language.code])}</div>
@@ -860,12 +1218,14 @@
       countVisible.textContent = filtered.length;
       countApproved.textContent = data.filter(item => item.status === "approved").length;
       countIssues.textContent = data.filter(item => item.comment.trim()).length;
+      countLanguages.textContent = visibleLanguages.length;
     }
 
     stringsEl.addEventListener("input", (event) => {
       const target = event.target;
       const index = Number(target.dataset.index);
       const action = target.dataset.action;
+
       if (!Number.isInteger(index) || !data[index]) return;
 
       if (action === "edit") {
@@ -883,11 +1243,61 @@
     stringsEl.addEventListener("change", (event) => {
       const target = event.target;
       const index = Number(target.dataset.index);
+
       if (target.dataset.action === "status" && data[index]) {
         data[index].status = target.value;
         saveData();
         render();
       }
+    });
+
+    languageChecks.addEventListener("change", (event) => {
+      const target = event.target;
+      if (target.type !== "checkbox") return;
+
+      const code = target.value;
+      let visibleLanguages = [...settings.visibleLanguages];
+
+      if (target.checked && !visibleLanguages.includes(code)) {
+        if (visibleLanguages.length >= MAX_LANGUAGES) {
+          target.checked = false;
+          alert(`Du kan højst vælge ${MAX_LANGUAGES} sprog ad gangen.`);
+          return;
+        }
+        visibleLanguages.push(code);
+      }
+
+      if (!target.checked && visibleLanguages.includes(code)) {
+        if (code === settings.primaryLanguage) {
+          target.checked = true;
+          return;
+        }
+
+        if (visibleLanguages.length <= MIN_LANGUAGES) {
+          target.checked = true;
+          alert(`Du skal vælge mindst ${MIN_LANGUAGES} sprog.`);
+          return;
+        }
+
+        visibleLanguages = visibleLanguages.filter(languageCode => languageCode !== code);
+      }
+
+      settings = normalizeSettings({
+        ...settings,
+        visibleLanguages
+      });
+      saveSettings();
+      render();
+    });
+
+    primaryLanguage.addEventListener("change", () => {
+      settings = normalizeSettings({
+        ...settings,
+        primaryLanguage: primaryLanguage.value,
+        visibleLanguages: [primaryLanguage.value, ...settings.visibleLanguages]
+      });
+      saveSettings();
+      render();
     });
 
     function updateCountsOnly() {
@@ -896,22 +1306,26 @@
     }
 
     function rowsForExport() {
-      return data.map(item => ({
-        key: item.key,
-        context: item.context,
-        status: item.status,
-        comment: item.comment,
-        da_original: item.text.da,
-        da_reviewed: item.edited.da,
-        en_original: item.text.en,
-        en_reviewed: item.edited.en,
-        fr_original: item.text.fr,
-        fr_reviewed: item.edited.fr,
-        fo_original: item.text.fo,
-        fo_reviewed: item.edited.fo,
-        de_original: item.text.de,
-        de_reviewed: item.edited.de
-      }));
+      const chosenLanguages = getChosenLanguages();
+
+      return data.map(item => {
+        const row = {
+          key: item.key,
+          context: item.context,
+          status: item.status,
+          comment: item.comment,
+          primary_language: languageByCode(settings.primaryLanguage).label
+        };
+
+        chosenLanguages.forEach(language => {
+          row[`${language.code}_language`] = language.label;
+          row[`${language.code}_role`] = language.role;
+          row[`${language.code}_original`] = item.text[language.code] || "";
+          row[`${language.code}_reviewed`] = item.edited[language.code] || "";
+        });
+
+        return row;
+      });
     }
 
     function downloadExcel() {
@@ -922,52 +1336,63 @@
     }
 
     function downloadPdf() {
+      const chosenLanguages = getChosenLanguages();
+      const primary = languageByCode(settings.primaryLanguage);
+
+      const headers = [
+        { text: "Key", bold: true },
+        { text: "Status", bold: true },
+        { text: "Kommentar", bold: true },
+        ...chosenLanguages.map(language => ({
+          text: `${language.label} ${language.role === "primary" ? "primary" : "check"}`,
+          bold: true
+        }))
+      ];
+
       const body = [
-        [
-          { text: "Key", bold: true },
-          { text: "Status", bold: true },
-          { text: "Kommentar", bold: true },
-          { text: "DA", bold: true },
-          { text: "EN", bold: true },
-          { text: "FR", bold: true },
-          { text: "FO", bold: true },
-          { text: "DE", bold: true }
-        ],
+        headers,
         ...data.map(item => [
           item.key,
           item.status,
           item.comment || "",
-          item.edited.da || "",
-          item.edited.en || "",
-          item.edited.fr || "",
-          item.edited.fo || "",
-          item.edited.de || ""
+          ...chosenLanguages.map(language => item.edited[language.code] || "")
         ])
       ];
 
       const docDefinition = {
         pageOrientation: "landscape",
         pageSize: "A4",
-        pageMargins: [24, 28, 24, 28],
+        pageMargins: [22, 26, 22, 26],
         defaultStyle: {
           font: "Roboto",
-          fontSize: 7
+          fontSize: chosenLanguages.length >= 4 ? 6.2 : 7
         },
         content: [
-          { text: "Á handil · sprogtjek", fontSize: 16, bold: true, margin: [0, 0, 0, 4] },
-          { text: `Eksporteret: ${new Date().toLocaleString("da-DK")}`, fontSize: 8, margin: [0, 0, 0, 12] },
+          {
+            text: "Á handil · sprogtjek",
+            fontSize: 16,
+            bold: true,
+            margin: [0, 0, 0, 4]
+          },
+          {
+            text: `Primært sprog: ${primary.label} · Synlige sprog: ${chosenLanguages.map(language => language.label).join(", ")}`,
+            fontSize: 8,
+            margin: [0, 0, 0, 12]
+          },
           {
             table: {
               headerRows: 1,
-              widths: [70, 55, 105, "*", "*", "*", "*", "*"],
+              widths: [58, 48, 90, ...chosenLanguages.map(() => "*")],
               body
             },
             layout: {
               fillColor: function (rowIndex) {
-                return rowIndex === 0 ? "#eef7ea" : null;
+                return rowIndex === 0 ? "#ffd947" : null;
               },
-              hLineColor: function () { return "#dddddd"; },
-              vLineColor: function () { return "#dddddd"; }
+              hLineColor: function () { return "#151515"; },
+              vLineColor: function () { return "#151515"; },
+              hLineWidth: function () { return 0.7; },
+              vLineWidth: function () { return 0.7; }
             }
           }
         ]
@@ -977,11 +1402,11 @@
     }
 
     searchInput.addEventListener("input", render);
-    languageFilter.addEventListener("change", render);
     statusFilter.addEventListener("change", render);
 
     document.getElementById("saveButton").addEventListener("click", () => {
       saveData();
+      saveSettings();
       alert("Gemt i denne browser.");
     });
 
@@ -989,9 +1414,11 @@
     document.getElementById("pdfButton").addEventListener("click", downloadPdf);
 
     document.getElementById("resetButton").addEventListener("click", () => {
-      if (!confirm("Vil du nulstille alle rettelser og kommentarer?")) return;
+      if (!confirm("Vil du nulstille alle rettelser, kommentarer og sprogvalg?")) return;
       localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(SETTINGS_KEY);
       data = getInitialData();
+      settings = getInitialSettings();
       render();
     });
 
