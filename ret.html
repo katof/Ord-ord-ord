@@ -3,1042 +3,1266 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Á handil · Sprogtjek</title>
+  <title>Á handil · Designmodul</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Export libraries -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/vfs_fonts.min.js"></script>
 
   <style>
     :root {
-      --bg: #f5efe3;
-      --paper: rgba(255, 253, 248, 0.88);
-      --card: #fffdf8;
-      --ink: #232528;
-      --muted: #697077;
+      --sidebar: #101318;
+      --sidebar-2: #171b22;
+      --bg: #f4f6f8;
+      --panel: #ffffff;
+      --panel-soft: #fafbfc;
+      --line: #dfe3e8;
+      --line-strong: #c9d0d8;
+      --text: #1f2933;
+      --muted: #697386;
       --green: #65c94a;
       --green-dark: #2e7d32;
-      --yellow: #f6df82;
-      --pink: #f5a9cb;
-      --blue: #b9def8;
-      --red: #e85b50;
-      --white: #ffffff;
-      --line: rgba(35, 37, 40, 0.14);
-      --border: 1px solid rgba(35, 37, 40, 0.18);
-      --border-thin: 1px solid rgba(35, 37, 40, 0.16);
-      --shadow: 0 14px 32px rgba(35, 37, 40, 0.10);
-      --shadow-small: 0 6px 14px rgba(35, 37, 40, 0.08);
-      --radius: 18px;
-      font-family: "Open Sans", Arial, sans-serif;
+      --blue: #3366ff;
+      --orange: #ffb020;
+      --red: #df4b4b;
+      --radius: 10px;
+      --shadow: 0 8px 24px rgba(17, 24, 39, 0.08);
+      font-family: Inter, "Open Sans", Arial, sans-serif;
     }
 
     * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
 
     body {
       margin: 0;
-      background:
-        radial-gradient(circle at 18px 18px, rgba(46, 125, 50, 0.08) 1.5px, transparent 1.5px),
-        linear-gradient(180deg, #fff8e6 0%, var(--bg) 58%, #efe3d0 100%);
-      background-size: 38px 38px, auto;
-      color: var(--ink);
-      font-family: "Open Sans", Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      font-family: Inter, "Open Sans", Arial, sans-serif;
+      font-size: 14px;
     }
 
-    .page {
-      width: min(1240px, calc(100% - 28px));
-      margin: 28px auto 42px;
-    }
-
-    .hero {
-      background: linear-gradient(135deg, #dff8d7 0%, #9ee889 100%);
-      color: var(--ink);
-      border: var(--border);
-      border-radius: 28px;
-      padding: clamp(20px, 3vw, 30px);
-      box-shadow: var(--shadow);
-      display: grid;
-      gap: 10px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      right: -58px;
-      top: -70px;
-      width: 170px;
-      height: 170px;
-      border: 1px solid rgba(35, 37, 40, 0.12);
-      background: rgba(255, 255, 255, 0.38);
-      transform: rotate(10deg);
-      border-radius: 42px;
-      opacity: 0.8;
-    }
-
-    .hero h1,
-    .hero p,
-    .hero .hero-tags {
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero h1 {
-      margin: 0;
-      max-width: 900px;
-      font-size: clamp(1.8rem, 4vw, 3.1rem);
-      line-height: 1.04;
-      letter-spacing: -0.04em;
-      font-weight: 800;
-    }
-
-    .hero p {
-      margin: 0;
-      max-width: 820px;
-      color: #2f3336;
-      line-height: 1.52;
-      font-weight: 600;
-      font-size: 0.96rem;
-    }
-
-    .hero-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 2px;
-    }
-
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      border: var(--border-thin);
-      background: rgba(255, 255, 255, 0.75);
-      border-radius: 999px;
-      padding: 5px 10px;
-      font-size: 0.78rem;
-      font-weight: 750;
-      box-shadow: none;
-    }
-
-    .toolbar {
-      display: grid;
-      gap: 8px;
-      margin: 18px 0 14px;
-      padding: 10px;
-      background: var(--paper);
-      border: var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      position: sticky;
-      top: 8px;
-      z-index: 20;
-      backdrop-filter: blur(16px);
-    }
-
-    .toolbar-top,
-    .toolbar-bottom {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: end;
-      justify-content: space-between;
-    }
-
-    .language-panel {
-      overflow: hidden;
-      max-height: 120px;
-      opacity: 1;
-      transition: max-height 180ms ease, opacity 160ms ease, margin 160ms ease;
-    }
-
-    .toolbar.languages-collapsed .language-panel {
-      max-height: 0;
-      opacity: 0;
-      margin: -4px 0 0;
-      pointer-events: none;
-    }
-
-    .toolbar-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: end;
-    }
-
-    .field-group {
-      display: grid;
-      gap: 3px;
-    }
-
-    .field-group span {
-      font-size: 0.68rem;
-      font-weight: 850;
-      text-transform: uppercase;
-      letter-spacing: 0.055em;
-    }
-
-    input[type="search"], select {
-      border: var(--border-thin);
-      background: rgba(255, 255, 255, 0.92);
-      border-radius: 999px;
-      padding: 8px 12px;
-      min-height: 38px;
-      font: inherit;
-      color: var(--ink);
-      font-weight: 700;
-      box-shadow: none;
-    }
-
-    input[type="search"] {
-      width: min(420px, 100%);
-    }
-
-    select {
-      min-width: 165px;
-    }
+    button, input, select, textarea { font: inherit; }
+    button, select, input { min-height: 36px; }
 
     button {
-      border: 0;
-      min-height: 38px;
-      border-radius: 999px;
-      padding: 8px 13px;
-      background: var(--green);
-      color: white;
-      font-weight: 800;
+      border: 1px solid var(--line-strong);
+      border-radius: 7px;
+      padding: 8px 12px;
+      background: #fff;
+      color: var(--text);
+      font-weight: 700;
       cursor: pointer;
-      font-family: inherit;
-      box-shadow: var(--shadow-small);
-      transform: translate(0, 0);
-      transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+      transition: background 120ms ease, border-color 120ms ease;
     }
 
     button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 18px rgba(35, 37, 40, 0.12);
+      background: #f8fafc;
+      border-color: #aeb7c2;
     }
 
-    button.secondary {
-      background: rgba(255,255,255,0.92);
+    button.ghost-dark {
+      background: transparent;
+      color: #c8d0dc;
+      border-color: rgba(255,255,255,0.14);
+    }
+
+    button.ghost-dark:hover {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+    }
+
+    a {
+      color: var(--blue);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    a:hover { text-decoration: underline; }
+
+    .app-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 74px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      background: linear-gradient(180deg, var(--sidebar), var(--sidebar-2));
+      color: #fff;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      align-items: start;
+      padding: 14px 10px;
+      gap: 18px;
+      z-index: 50;
+    }
+
+    .logo-button {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.24);
+      overflow: hidden;
+      margin: 0 auto;
+    }
+
+    .logo-button img {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+    }
+
+    .side-actions {
+      display: grid;
+      gap: 10px;
+    }
+
+    .side-button {
+      width: 54px;
+      min-height: 54px;
+      display: grid;
+      place-items: center;
+      gap: 2px;
+      padding: 7px 5px;
+      border-radius: 12px;
+      font-size: 10px;
+      line-height: 1.05;
+      text-align: center;
+      font-weight: 800;
+    }
+
+    .side-button .icon {
+      display: block;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .progress-tile {
+      width: 54px;
+      padding: 8px 5px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.07);
+      color: #fff;
+      text-align: center;
+    }
+
+    .progress-tile strong {
+      display: block;
+      font-size: 17px;
+    }
+
+    .progress-tile span {
+      display: block;
+      margin-top: 2px;
+      color: #bac4d2;
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .main { min-width: 0; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .project-header {
+      min-height: 68px;
+      padding: 14px 22px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .breadcrumbs {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .project-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 4px;
+      flex-wrap: wrap;
+    }
+
+    .project-title h1 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: -0.02em;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 3px 8px;
+      background: #eef8eb;
       color: var(--green-dark);
-      border: var(--border-thin);
+      font-size: 11px;
+      font-weight: 800;
     }
 
-    button.danger {
-      background: var(--red);
-      color: var(--white);
+    .project-link { white-space: nowrap; }
+
+    .filterbar {
+      padding: 12px 22px;
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto;
+      gap: 12px;
+      align-items: center;
     }
 
-    button.ghost {
-      background: rgba(255,255,255,0.72);
-      color: var(--ink);
-      border: var(--border-thin);
-      box-shadow: none;
+    .filter-left,
+    .filter-right {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .filter-right { justify-content: end; }
+
+    input[type="search"], select {
+      border: 1px solid var(--line-strong);
+      border-radius: 7px;
+      background: #fff;
+      color: var(--text);
+      padding: 7px 10px;
+      font-weight: 600;
+    }
+
+    input[type="search"] {
+      width: min(430px, 100%);
+    }
+
+    .content {
+      padding: 18px 22px 36px;
+    }
+
+    .language-strip {
+      margin-bottom: 14px;
+      padding: 12px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 10px;
+    }
+
+    .language-strip-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     .language-checks {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      padding: 7px;
-      background: rgba(255,255,255,0.74);
-      border: var(--border-thin);
-      border-radius: 14px;
-      box-shadow: none;
+      gap: 8px;
     }
 
     .language-checks label {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      padding: 6px 9px;
-      border: 1px solid rgba(35,37,40,0.14);
+      gap: 7px;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
       border-radius: 999px;
-      background: white;
-      font-size: 0.8rem;
-      font-weight: 760;
+      background: #fff;
+      font-weight: 700;
+      color: var(--text);
       cursor: pointer;
     }
 
     .language-checks input {
-      accent-color: var(--green-dark);
-      width: 15px;
-      height: 15px;
+      accent-color: var(--blue);
     }
 
-    .hint {
+    .stats-line {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
       color: var(--muted);
-      font-size: 0.76rem;
-      font-weight: 650;
-      line-height: 1.25;
-    }
-
-    .meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 18px;
-    }
-
-    .pill {
-      display: inline-flex;
-      gap: 8px;
-      align-items: center;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.86);
-      border: var(--border-thin);
-      padding: 7px 11px;
-      color: var(--ink);
-      font-size: 0.86rem;
-      font-weight: 780;
-      box-shadow: none;
-    }
-
-    .pill strong {
-      background: #eef8eb;
-      border: 1px solid rgba(46,125,50,0.18);
-      border-radius: 999px;
-      padding: 2px 8px;
-      line-height: 1.2;
-      color: var(--green-dark);
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 18px;
-    }
-
-    .string-card {
-      background: var(--card);
-      border: var(--border);
-      border-radius: 22px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .string-head {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 12px 14px;
-      border-bottom: var(--border-thin);
-      background: rgba(255, 250, 236, 0.92);
-    }
-
-    .key {
-      display: inline-flex;
-      align-items: center;
-      width: fit-content;
-      background: #eef8eb;
-      color: var(--green-dark);
-      border: 1px solid rgba(46,125,50,0.16);
-      border-radius: 999px;
-      padding: 4px 10px;
-      font-weight: 800;
-      letter-spacing: -0.015em;
-    }
-
-    .context {
-      color: var(--ink);
-      font-size: 0.9rem;
-      line-height: 1.4;
-      margin-top: 5px;
       font-weight: 700;
     }
 
-    .grid {
+    .stat-pill {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 6px 10px;
+    }
+
+    .stat-pill strong { color: var(--text); }
+
+    .editor-list {
       display: grid;
-      grid-template-columns: repeat(var(--visible-count, 2), minmax(0, 1fr));
-      gap: 1px;
-      background: rgba(35,37,40,0.10);
-      border-bottom: var(--border-thin);
+      gap: 10px;
     }
 
-    .cell {
-      background: var(--card);
-      padding: 13px;
-      min-height: 178px;
+    .key-row {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 8px rgba(17, 24, 39, 0.04);
+      overflow: hidden;
+    }
+
+    .key-head {
+      min-height: 44px;
       display: grid;
-      align-content: start;
-      gap: 9px;
-      border-right: 0;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 8px 12px;
+      background: var(--panel-soft);
+      border-bottom: 1px solid var(--line);
     }
 
-    .cell:last-child {
-      border-right: 0;
+    .key-name {
+      min-width: 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
     }
 
-    .cell label {
+    .key-name code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      color: #26384d;
+      background: #eef2f7;
+      border: 1px solid #d9e0e8;
+      border-radius: 6px;
+      padding: 3px 6px;
+      overflow-wrap: anywhere;
+    }
+
+    .category {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .context {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .row-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tiny-button {
+      min-height: 28px;
+      padding: 4px 8px;
+      font-size: 12px;
+      box-shadow: none;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--orange);
+    }
+
+    .key-row[data-status="approved"] .status-dot {
+      background: var(--green);
+    }
+
+    .key-row[data-has-comment="true"] .status-dot {
+      box-shadow: 0 0 0 3px rgba(255, 176, 32, 0.18);
+    }
+
+    .translation-grid {
+      display: grid;
+      grid-template-columns: repeat(var(--visible-count, 2), minmax(260px, 1fr));
+      border-bottom: 1px solid var(--line);
+      overflow-x: auto;
+    }
+
+    .translation-cell {
+      min-width: 260px;
+      border-right: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .translation-cell:last-child { border-right: 0; }
+
+    .cell-head {
+      min-height: 38px;
+      padding: 9px 12px;
       display: flex;
       justify-content: space-between;
       gap: 8px;
       align-items: center;
-      font-size: 0.76rem;
-      font-weight: 900;
-      color: var(--ink);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .label-left {
-      display: inline-flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .primary-badge,
-    .compare-badge {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 999px;
-      padding: 3px 7px;
-      border: 0;
-      color: var(--ink);
-      font-size: 0.66rem;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfe;
+      color: var(--muted);
+      font-size: 12px;
       font-weight: 800;
-      letter-spacing: 0;
-      text-transform: none;
     }
-
-    .primary-badge { background: #dff8d7; color: var(--green-dark); }
-    .compare-badge { background: #f7e7ef; color: #8f3a62; }
 
     .source-text {
-      color: var(--ink);
+      min-height: 46px;
+      padding: 10px 12px;
+      color: var(--muted);
+      background: #f8fafc;
+      border-bottom: 1px solid var(--line);
       line-height: 1.45;
-      font-size: 0.95rem;
       white-space: pre-wrap;
-      font-weight: 600;
-      padding: 9px;
-      border: 1px solid rgba(35,37,40,0.10);
-      border-radius: 12px;
-      background: #fffaf0;
     }
 
-    textarea {
+    textarea.translation-input {
+      display: block;
       width: 100%;
-      min-height: 92px;
+      min-height: 94px;
       resize: vertical;
-      border: 1px solid rgba(35,37,40,0.16);
-      border-radius: 12px;
-      padding: 9px;
-      background: var(--white);
-      color: var(--ink);
-      font: inherit;
-      line-height: 1.45;
-      font-weight: 600;
-      box-shadow: none;
+      border: 0;
+      outline: 0;
+      padding: 12px;
+      color: var(--text);
+      background: #fff;
+      line-height: 1.5;
+      font-weight: 500;
     }
 
-    textarea:focus,
-    input:focus,
-    select:focus {
-      outline: 3px solid rgba(101, 201, 74, 0.20);
-      border-color: rgba(46, 125, 50, 0.45);
+    textarea.translation-input:focus {
+      box-shadow: inset 0 0 0 2px rgba(51, 102, 255, 0.22);
     }
 
-    .status-row {
+    .comment-row {
       display: grid;
-      grid-template-columns: 220px 1fr;
+      grid-template-columns: 190px minmax(0, 1fr);
       gap: 12px;
-      padding: 12px 14px;
-      background: rgba(245, 249, 252, 0.92);
+      padding: 10px 12px;
+      background: #fff;
     }
 
-    .status-row textarea {
-      min-height: 74px;
+    .comment-label strong {
+      display: block;
+      font-size: 12px;
+    }
+
+    .comment-label span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .comment-row textarea {
+      min-height: 48px;
+      resize: vertical;
+      border: 1px solid var(--line-strong);
+      border-radius: 7px;
+      padding: 8px 10px;
+      outline: 0;
+    }
+
+    .comment-row textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(51,102,255,0.12);
     }
 
     .empty {
       display: none;
+      padding: 36px;
       text-align: center;
-      padding: 34px;
-      color: var(--ink);
-      background: rgba(255,255,255,0.9);
+      background: #fff;
+      border: 1px solid var(--line);
       border-radius: var(--radius);
-      border: var(--border);
-      box-shadow: var(--shadow);
+      color: var(--muted);
       font-weight: 800;
     }
 
     .empty.visible { display: block; }
 
-    @media (max-width: 1100px) {
-      .grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .cell:nth-child(2n) {
-        border-right: 0;
-      }
+    .progress-panel {
+      width: min(440px, calc(100vw - 40px));
+      position: fixed;
+      left: 86px;
+      bottom: 18px;
+      z-index: 80;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 20px 60px rgba(17,24,39,0.22);
+      padding: 16px;
+      display: none;
     }
 
-    @media (max-width: 720px) {
-      .page {
-        width: min(100% - 18px, 1240px);
-        margin-top: 16px;
+    .progress-panel.visible {
+      display: grid;
+      gap: 12px;
+    }
+
+    .progress-panel h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .progress-bar {
+      height: 12px;
+      background: #edf1f5;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--green);
+      border-radius: 999px;
+    }
+
+    .progress-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .progress-card {
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fafbfc;
+    }
+
+    .progress-card strong {
+      display: block;
+      font-size: 20px;
+    }
+
+    .progress-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 900px) {
+      .app-shell { grid-template-columns: 1fr; }
+
+      .sidebar {
+        position: sticky;
+        top: 0;
+        height: auto;
+        grid-template-columns: auto 1fr auto;
+        grid-template-rows: auto;
+        align-items: center;
+        padding: 8px 10px;
       }
 
-      .hero,
-      .toolbar,
-      .string-card,
-      .empty {
-        box-shadow: 5px 5px 0 var(--ink);
+      .side-actions {
+        grid-auto-flow: column;
+        overflow-x: auto;
       }
 
-      .toolbar {
-        position: static;
+      .side-button,
+      .progress-tile {
+        width: auto;
+        min-width: 58px;
       }
 
-      .grid {
-        grid-template-columns: 1fr;
+      .filterbar { grid-template-columns: 1fr; }
+      .filter-right { justify-content: start; }
+
+      .project-header {
+        align-items: flex-start;
+        flex-direction: column;
       }
 
-      .cell {
-        min-height: auto;
+      .translation-grid { grid-template-columns: 1fr; }
+
+      .translation-cell {
         border-right: 0;
-        border-bottom: var(--border-thin);
+        border-bottom: 1px solid var(--line);
       }
 
-      .cell:last-child {
-        border-bottom: 0;
-      }
+      .comment-row { grid-template-columns: 1fr; }
 
-      .status-row {
-        grid-template-columns: 1fr;
-      }
-
-      input[type="search"], select {
-        width: 100%;
-      }
-
-      .toolbar-group,
-      .toolbar-top,
-      .toolbar-bottom {
-        width: 100%;
+      .progress-panel {
+        left: 10px;
+        bottom: 10px;
       }
     }
 
     @media print {
+      .sidebar,
+      .topbar,
+      .language-strip,
+      .comment-row,
+      .row-actions {
+        display: none;
+      }
+
+      .app-shell { display: block; }
+      .content { padding: 0; }
+
+      .key-row {
+        break-inside: avoid;
+        box-shadow: none;
+      }
+
       body { background: white; }
-      .toolbar { display: none; }
-      .page { width: 100%; margin: 0; }
-      .hero, .string-card, .empty, .pill, textarea, input, select { box-shadow: none; }
-      .hero { border-radius: 0; }
-      .hero::after { display: none; }
-      .string-card { break-inside: avoid; }
-      textarea { border: 1px solid #999; }
     }
   </style>
 </head>
 
 <body>
-  <main class="page">
-    <section class="hero">
-      <h1>Á handil · sprogtjek</h1>
-      <p>Et mere tydeligt localization-værktøj: vælg et primært sprog, vælg 2–4 sprog i alt, ret eller kommentér teksterne, og download arbejdet som Excel eller PDF.</p>
-      <div class="hero-tags" aria-label="Funktioner">
-        <span class="tag">Primary language</span>
-        <span class="tag">2–4 languages</span>
-        <span class="tag">Excel + PDF</span>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Værktøjer">
+      <div class="logo-button" title="Á handil">
+        <img src="https://itdd.au.dk/single-user-mode/wp-content/uploads/sites/103/2026/05/a_logo.png" alt="Á handil logo">
       </div>
-    </section>
 
-    <section class="toolbar" aria-label="Værktøjslinje">
-      <div class="toolbar-top">
-        <div class="toolbar-group">
-          <div class="field-group">
-            <span>Søg</span>
-            <input id="searchInput" type="search" placeholder="Søg efter key, tekst eller kommentar…" />
+      <div class="side-actions">
+        <button class="side-button ghost-dark" type="button" id="excelButton">
+          <span class="icon">↓</span>Excel
+        </button>
+
+        <button class="side-button ghost-dark" type="button" id="pdfButton">
+          <span class="icon">↓</span>PDF
+        </button>
+
+        <button class="side-button ghost-dark" type="button" id="saveButton">
+          <span class="icon">✓</span>Gem
+        </button>
+
+        <button class="side-button ghost-dark" type="button" id="resetButton">
+          <span class="icon">↺</span>Reset
+        </button>
+
+        <button class="side-button ghost-dark" type="button" id="progressButton">
+          <span class="icon">◷</span>Status
+        </button>
+      </div>
+
+      <div class="progress-tile" title="Godkendt">
+        <strong id="sidePercent">0%</strong>
+        <span>done</span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="project-header">
+          <div>
+            <div class="breadcrumbs">Projects — Á handil í Vestmanna</div>
+
+            <div class="project-title">
+              <h1>Translation cockpit</h1>
+              <span class="badge">Designmodul</span>
+            </div>
           </div>
 
-          <div class="field-group">
-            <span>Primært sprog</span>
-            <select id="primaryLanguage" aria-label="Primært sprog">
-              <option value="da">Dansk</option>
-              <option value="en">English</option>
-              <option value="fr">Français</option>
-              <option value="fo">Føroyskt</option>
-              <option value="de">Deutsch</option>
-            </select>
-          </div>
+          <a class="project-link" href="https://itdd.au.dk/single-user-mode/prototyper/" target="_blank" rel="noopener">
+            Um verkætlanina
+          </a>
+        </div>
 
-          <div class="field-group">
-            <span>Status</span>
+        <div class="filterbar">
+          <div class="filter-left">
+            <input id="searchInput" type="search" placeholder="Search keys, translations, comments…" />
+
             <select id="statusFilter" aria-label="Filtrér efter status">
-              <option value="all">Alle statusser</option>
-              <option value="needs-review">Skal tjekkes</option>
-              <option value="approved">Godkendt</option>
-              <option value="issue">Har kommentar</option>
+              <option value="all">All statuses</option>
+              <option value="needs-review">Needs review</option>
+              <option value="approved">Approved</option>
+              <option value="issue">Has comment</option>
             </select>
           </div>
-        </div>
 
-        <div class="toolbar-group">
-          <button type="button" class="ghost" id="toggleLanguagePanel" aria-expanded="true" aria-controls="languagePanel">Skjul sprogvalg</button>
-          <button type="button" class="secondary" id="saveButton">Gem i browser</button>
-          <button type="button" id="excelButton">Download Excel</button>
-          <button type="button" id="pdfButton">Download PDF</button>
-          <button type="button" class="danger" id="resetButton">Nulstil</button>
+          <div class="filter-right">
+            <button type="button" id="clearSearchButton">Clear search</button>
+          </div>
         </div>
+      </header>
+
+      <section class="content">
+        <section class="language-strip" aria-label="Synlige sprog">
+          <div class="language-strip-title">Choose languages</div>
+          <div id="languageChecks" class="language-checks"></div>
+        </section>
+
+        <section class="stats-line" aria-live="polite">
+          <span class="stat-pill"><strong id="countVisible">0</strong> visible keys</span>
+          <span class="stat-pill"><strong id="countApproved">0</strong> approved</span>
+          <span class="stat-pill"><strong id="countIssues">0</strong> with comments</span>
+          <span class="stat-pill"><strong id="countLanguages">0</strong> languages</span>
+          <span class="stat-pill"><strong id="countTotal">0</strong> total</span>
+        </section>
+
+        <section id="strings" class="editor-list"></section>
+        <section id="empty" class="empty">No keys match the current filter.</section>
+      </section>
+    </main>
+  </div>
+
+  <aside id="progressPanel" class="progress-panel" aria-live="polite">
+    <div style="display:flex; justify-content:space-between; gap:12px; align-items:center;">
+      <h2>Review progress</h2>
+      <button type="button" class="tiny-button" id="closeProgress">Close</button>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="progress-grid">
+      <div class="progress-card">
+        <strong id="progressApproved">0</strong>
+        <span>approved</span>
       </div>
 
-      <div class="toolbar-bottom language-panel" id="languagePanel">
-        <div class="field-group">
-          <span>Synlige sprog</span>
-          <div id="languageChecks" class="language-checks" aria-label="Vælg synlige sprog"></div>
-          <div class="hint">Vælg mindst 2 og højst 4 sprog. Det primære sprog bliver altid vist.</div>
-        </div>
+      <div class="progress-card">
+        <strong id="progressLeft">0</strong>
+        <span>left</span>
       </div>
-    </section>
 
-    <section class="meta" aria-live="polite">
-      <span class="pill"><strong id="countVisible">0</strong> viste strenge</span>
-      <span class="pill"><strong id="countApproved">0</strong> godkendt</span>
-      <span class="pill"><strong id="countIssues">0</strong> med kommentar</span>
-      <span class="pill"><strong id="countLanguages">0</strong> valgte sprog</span>
-    </section>
-
-    <section id="strings" class="layout"></section>
-    <section id="empty" class="empty">Ingen strenge matcher filtreringen.</section>
-  </main>
+      <div class="progress-card">
+        <strong id="progressWordsLeft">0</strong>
+        <span>words left</span>
+      </div>
+    </div>
+  </aside>
 
   <script>
-    const STORAGE_KEY = "ahandil-localize-review-v3-neo-brutal";
-    const SETTINGS_KEY = "ahandil-localize-review-settings-v1";
-    const LANGUAGE_PANEL_KEY = "ahandil-localize-review-language-panel-v1";
-    const MIN_LANGUAGES = 2;
-    const MAX_LANGUAGES = 4;
+    const STORAGE_KEY = "ahandil-localize-review-v9-all-languages";
+    const SETTINGS_KEY = "ahandil-localize-review-settings-v9-all-languages";
 
     const languages = [
-      { code: "da", label: "Dansk" },
+      { code: "da", label: "Danish" },
       { code: "en", label: "English" },
-      { code: "fr", label: "Français" },
-      { code: "fo", label: "Føroyskt" },
-      { code: "de", label: "Deutsch" }
+      { code: "fr", label: "French" },
+      { code: "fo", label: "Faroese" },
+      { code: "de", label: "German" }
     ];
 
-    const sourceStrings = [
-      {
-        key: "statusLeft",
-        context: "Statusbar øverst i telefon-preview",
-        text: {
-          da: "Ny her?",
-          en: "New here?",
-          fr: "Nouveau ici ?",
-          fo: "Nýggj/ur her?",
-          de: "Neu hier?"
-        }
+    const translations = {
+      da: {
+        pageTitle: "Ny her? | Á handil í Vestmanna",
+        skipLink: "Gå til indhold",
+        statusRight: "Vestmanna",
+        brandSmall: "Underside",
+        brandStrong: "Á handil í Vestmanna",
+        heroEyebrow: "Velkommen til Á handil",
+        heroTitle: "Ny her?",
+        heroText: "Her finder du åbningstider, et lille indblik i Á handil og lidt hjælp, hvis du er i tvivl om noget.",
+        quickHoursTitle: "Åbningstider",
+        quickHoursText: "Se hvornår der er åbent",
+        quickOffersTitle: "Tilbud",
+        quickOffersText: "Åbn ugens tilbudsblad",
+        quickLookTitle: "Find butikken",
+        quickLookText: "Se facaden udefra",
+        quickHelpTitle: "Hjælp",
+        quickHelpText: "Kontakt og hjemmeside",
+        facadeTitle: "Sådan ser Á handil ud",
+        facadeSub: "Butikken kan kendes på den mørke facade og det grønne Á.",
+        facadeTag: "Kendetegn",
+        facadeCardTitle: "Á handil udefra",
+        facadeText: "Billedet viser, hvordan butikken ser ud ved ankomst.",
+        hoursTitle: "Åbningstider",
+        hoursSub: "Praktisk information",
+        practicalTag: "Praktisk info",
+        hoursOpenTitle: "Butikken holder åbent",
+        weekdayLabel: "Mandag–fredag",
+        saturdayLabel: "Lørdag",
+        sundayLabel: "Søndag",
+        closedLabel: "Lukket",
+        hoursNote: "Tjek gerne hjemmesiden eller opslag ved butikken ved helligdage.",
+        welcomeTitle: "Et lille første indblik",
+        welcomeText: "Á handil er den lokale butik i Vestmanna. Her kan du handle, spørge og få hjælp, hvis du er i tvivl om noget.",
+        localTag: "Lokal butik",
+        localTitle: "En del af hverdagen i bygden",
+        localText: "Á handil er ikke kun et sted for indkøb. Det er også en lokal butik, hvor folk ofte stopper op, hilser og får en lille snak.",
+        offersTag: "Tilbud",
+        offersTitle: "Se ugens tilbud",
+        offersText: "Du kan også åbne butikkens tilbudsblad. Tilbudsbladet er på færøsk.",
+        offersLinkTitle: "Åbn tilbudsblad",
+        offersLinkSmall: "PDF på færøsk",
+        helpTag: "Har du brug for hjælp?",
+        helpTitle: "Spørg os gerne",
+        helpText: "Hvis du leder efter noget bestemt eller vil vide mere om butikken, hjælper vi gerne.",
+        phoneTitle: "Ring til butikken",
+        emailTitle: "Skriv til bestyreren",
+        siteLinkTitle: "Til Á handils hjemmeside",
+        siteLinkSmall: "Mere information om butikken",
+        phrasesEyebrow: "En lille hjælp i butikken",
+        phrasesTitle: "Sig det på færøsk",
+        phrasesIntro: "En lille mini-ordbog til nye kunder, så det føles lidt nemmere at spørge om hjælp.",
+        phraseOneFo: "Góðan dag",
+        phraseOneHelp: "Hej / goddag",
+        phraseTwoFo: "Hvar finni eg ...?",
+        phraseTwoHelp: "Hvor finder jeg ...?",
+        phraseThreeFo: "Kann eg fáa hjálp?",
+        phraseThreeHelp: "Kan jeg få hjælp?",
+        phraseFourFo: "Takk fyri",
+        phraseFourHelp: "Tak skal du have",
+        foAdviceOneTitle: "Spørg personalet",
+        foAdviceOneText: "Hvis du ikke finder det, du leder efter, hjælper vi gerne.",
+        foAdviceTwoTitle: "Ring eller skriv",
+        foAdviceTwoText: "Du kan kontakte butikken, hvis du har spørgsmål.",
+        footerText: "Hurtige genveje",
+        bottomHours: "Åbningstider",
+        bottomOffers: "Se tilbud",
+        bottomWebsite: "Hjemmeside"
       },
-      {
-        key: "statusRight",
-        context: "Statusbar, stednavn",
-        text: {
-          da: "Vestmanna",
-          en: "Vestmanna",
-          fr: "Vestmanna",
-          fo: "Vestmanna",
-          de: "Vestmanna"
-        }
+
+      en: {
+        pageTitle: "New here? | Á handil in Vestmanna",
+        skipLink: "Skip to content",
+        statusRight: "Vestmanna",
+        brandSmall: "Subpage",
+        brandStrong: "Á handil in Vestmanna",
+        heroEyebrow: "Welcome to Á handil",
+        heroTitle: "New here?",
+        heroText: "Here you can find opening hours, a short introduction to Á handil, and a little help if you are unsure about anything.",
+        quickHoursTitle: "Opening hours",
+        quickHoursText: "See when the shop is open",
+        quickOffersTitle: "Offers",
+        quickOffersText: "Open this week’s leaflet",
+        quickLookTitle: "Find the shop",
+        quickLookText: "See the facade from outside",
+        quickHelpTitle: "Help",
+        quickHelpText: "Contact and website",
+        facadeTitle: "This is what Á handil looks like",
+        facadeSub: "The shop can be recognized by the dark facade and the green Á.",
+        facadeTag: "Landmark",
+        facadeCardTitle: "Á handil from outside",
+        facadeText: "The image shows what the shop looks like when you arrive.",
+        hoursTitle: "Opening hours",
+        hoursSub: "Practical information",
+        practicalTag: "Practical info",
+        hoursOpenTitle: "The shop is open",
+        weekdayLabel: "Monday–Friday",
+        saturdayLabel: "Saturday",
+        sundayLabel: "Sunday",
+        closedLabel: "Closed",
+        hoursNote: "Please check the website or the notice by the shop on public holidays.",
+        welcomeTitle: "A small first glimpse",
+        welcomeText: "Á handil is the local shop in Vestmanna. Here you can shop, ask questions and get help if you are unsure about anything.",
+        localTag: "Local shop",
+        localTitle: "A part of everyday life in the village",
+        localText: "Á handil is not only a place for shopping. It is also a local shop where people often stop, say hello and have a short chat.",
+        offersTag: "Offers",
+        offersTitle: "See this week’s offers",
+        offersText: "You can also open the shop’s leaflet. The leaflet is in Faroese.",
+        offersLinkTitle: "Open leaflet",
+        offersLinkSmall: "PDF in Faroese",
+        helpTag: "Do you need help?",
+        helpTitle: "Please ask us",
+        helpText: "If you are looking for something specific or want to know more about the shop, we are happy to help.",
+        phoneTitle: "Call the shop",
+        emailTitle: "Write to the manager",
+        siteLinkTitle: "Go to Á handil’s website",
+        siteLinkSmall: "More information about the shop",
+        phrasesEyebrow: "A little help in the shop",
+        phrasesTitle: "Say it in Faroese",
+        phrasesIntro: "A small mini dictionary for new customers, so it feels a little easier to ask for help.",
+        phraseOneFo: "Góðan dag",
+        phraseOneHelp: "Hello / good day",
+        phraseTwoFo: "Hvar finni eg ...?",
+        phraseTwoHelp: "Where can I find ...?",
+        phraseThreeFo: "Kann eg fáa hjálp?",
+        phraseThreeHelp: "Can I get help?",
+        phraseFourFo: "Takk fyri",
+        phraseFourHelp: "Thank you",
+        foAdviceOneTitle: "Ask the staff",
+        foAdviceOneText: "If you cannot find what you are looking for, we are happy to help.",
+        foAdviceTwoTitle: "Call or write",
+        foAdviceTwoText: "You can contact the shop if you have questions.",
+        footerText: "Quick links",
+        bottomHours: "Opening hours",
+        bottomOffers: "See offers",
+        bottomWebsite: "Website"
       },
-      {
-        key: "brandSmall",
-        context: "Lille tekst over navnet i topbaren",
-        text: {
-          da: "Underside",
-          en: "Subpage",
-          fr: "Sous-page",
-          fo: "Undirsíða",
-          de: "Unterseite"
-        }
+
+      fr: {
+        pageTitle: "Nouveau ici ? | Á handil à Vestmanna",
+        skipLink: "Aller au contenu",
+        statusRight: "Vestmanna",
+        brandSmall: "Sous-page",
+        brandStrong: "Á handil à Vestmanna",
+        heroEyebrow: "Bienvenue chez Á handil",
+        heroTitle: "Nouveau ici ?",
+        heroText: "Vous trouverez ici les horaires, une petite présentation de Á handil et un peu d’aide si vous avez un doute.",
+        quickHoursTitle: "Horaires",
+        quickHoursText: "Voir quand le magasin est ouvert",
+        quickOffersTitle: "Offres",
+        quickOffersText: "Ouvrir le prospectus de la semaine",
+        quickLookTitle: "Trouver le magasin",
+        quickLookText: "Voir la façade depuis l’extérieur",
+        quickHelpTitle: "Aide",
+        quickHelpText: "Contact et site web",
+        facadeTitle: "Voici à quoi ressemble Á handil",
+        facadeSub: "Le magasin se reconnaît à sa façade sombre et au Á vert.",
+        facadeTag: "Point de repère",
+        facadeCardTitle: "Á handil vu de l’extérieur",
+        facadeText: "L’image montre à quoi ressemble le magasin lorsque vous arrivez.",
+        hoursTitle: "Horaires",
+        hoursSub: "Informations pratiques",
+        practicalTag: "Infos pratiques",
+        hoursOpenTitle: "Le magasin est ouvert",
+        weekdayLabel: "Lundi–vendredi",
+        saturdayLabel: "Samedi",
+        sundayLabel: "Dimanche",
+        closedLabel: "Fermé",
+        hoursNote: "Veuillez consulter le site web ou l’affichage près du magasin les jours fériés.",
+        welcomeTitle: "Un premier petit aperçu",
+        welcomeText: "Á handil est le magasin local de Vestmanna. Vous pouvez y faire vos achats, poser des questions et obtenir de l’aide si vous avez un doute.",
+        localTag: "Magasin local",
+        localTitle: "Une partie du quotidien du village",
+        localText: "Á handil n’est pas seulement un lieu pour faire ses courses. C’est aussi un magasin local où les gens s’arrêtent souvent, se saluent et discutent un peu.",
+        offersTag: "Offres",
+        offersTitle: "Voir les offres de la semaine",
+        offersText: "Vous pouvez aussi ouvrir le prospectus du magasin. Le prospectus est en féroïen.",
+        offersLinkTitle: "Ouvrir le prospectus",
+        offersLinkSmall: "PDF en féroïen",
+        helpTag: "Avez-vous besoin d’aide ?",
+        helpTitle: "N’hésitez pas à nous demander",
+        helpText: "Si vous cherchez quelque chose de précis ou si vous voulez en savoir plus sur le magasin, nous vous aidons volontiers.",
+        phoneTitle: "Appeler le magasin",
+        emailTitle: "Écrire au responsable",
+        siteLinkTitle: "Vers le site web de Á handil",
+        siteLinkSmall: "Plus d’informations sur le magasin",
+        phrasesEyebrow: "Un peu d’aide dans le magasin",
+        phrasesTitle: "Le dire en féroïen",
+        phrasesIntro: "Un petit mini-dictionnaire pour les nouveaux clients, afin qu’il soit un peu plus facile de demander de l’aide.",
+        phraseOneFo: "Góðan dag",
+        phraseOneHelp: "Bonjour",
+        phraseTwoFo: "Hvar finni eg ...?",
+        phraseTwoHelp: "Où puis-je trouver ... ?",
+        phraseThreeFo: "Kann eg fáa hjálp?",
+        phraseThreeHelp: "Puis-je avoir de l’aide ?",
+        phraseFourFo: "Takk fyri",
+        phraseFourHelp: "Merci",
+        foAdviceOneTitle: "Demandez au personnel",
+        foAdviceOneText: "Si vous ne trouvez pas ce que vous cherchez, nous vous aidons volontiers.",
+        foAdviceTwoTitle: "Appelez ou écrivez",
+        foAdviceTwoText: "Vous pouvez contacter le magasin si vous avez des questions.",
+        footerText: "Liens rapides",
+        bottomHours: "Horaires",
+        bottomOffers: "Voir les offres",
+        bottomWebsite: "Site web"
       },
-      {
-        key: "brandStrong",
-        context: "Butiksnavn i topbaren",
-        text: {
-          da: "Á handil í Vestmanna",
-          en: "Á handil in Vestmanna",
-          fr: "Á handil à Vestmanna",
-          fo: "Á handil í Vestmanna",
-          de: "Á handil in Vestmanna"
-        }
+
+      fo: {
+        pageTitle: "Hevur tú verið her fyrr? | Á handil í Vestmanna",
+        skipLink: "Far til innihald",
+        statusRight: "Vestmanna",
+        brandSmall: "Undirsíða",
+        brandStrong: "Á handil í Vestmanna",
+        heroEyebrow: "Vælkomin í Á handil",
+        heroTitle: "Hevur tú verið her fyrr?",
+        heroText: "Her finnur tú upplatingartíðir, eitt lítið innlit í Á handil og samband, um tú hevur spurningar.",
+        quickHoursTitle: "Upplatingartíðir",
+        quickHoursText: "Sí nær handilin er opin",
+        quickOffersTitle: "Tilboð",
+        quickOffersText: "Lat vikunnar blað upp",
+        quickLookTitle: "Finn handilin",
+        quickLookText: "Sí fasaduna uttanífrá",
+        quickHelpTitle: "Samband",
+        quickHelpText: "Telefon, teldupostur og heimasíða",
+        facadeTitle: "Soleiðis sær Á handil út",
+        facadeSub: "Handilin kennist aftur á myrku fasaduni og tí grøna Á-num.",
+        facadeTag: "Kennimerki",
+        facadeCardTitle: "Á handil uttanífrá",
+        facadeText: "Myndin vísir, hvussu handilin sær út, tá tú kemur fram.",
+        hoursTitle: "Upplatingartíðir",
+        hoursSub: "Praktisk kunning",
+        practicalTag: "Praktisk kunning",
+        hoursOpenTitle: "Handilin er opin",
+        weekdayLabel: "Mánadag–fríggjadag",
+        saturdayLabel: "Leygardag",
+        sundayLabel: "Sunnudag",
+        closedLabel: "Stongt",
+        hoursNote: "Kanna fegin heimasíðuna ella uppslagið við handilin halgidagar.",
+        welcomeTitle: "Eitt lítið innlit",
+        welcomeText: "Á handil er tann lokali handilin í Vestmanna. Her kanst tú keypa, spyrja og fáa hjálp, um tú ert í iva um okkurt.",
+        localTag: "Lokalur handil",
+        localTitle: "Partur av gerandisdegnum í bygdini",
+        localText: "Á handil er ikki bara eitt stað at keypa. Tað er eisini ein lokalur handil, har fólk ofta steðga, heilsa og fáa sær eina lítla samrøðu.",
+        offersTag: "Tilboð",
+        offersTitle: "Sí vikunnar tilboð",
+        offersText: "Tú kanst eisini lata upp tilboðsblaðið hjá handlinum. Tilboðsblaðið er á føroyskum.",
+        offersLinkTitle: "Lat tilboðsblaðið upp",
+        offersLinkSmall: "PDF á føroyskum",
+        helpTag: "Hevur tú spurningar?",
+        helpTitle: "Spyr okkum endiliga",
+        helpText: "Um tú leitar eftir nøkrum ávísum ella vilt vita meira um handilin, hjálpa vit fegin.",
+        phoneTitle: "Ring til handilin",
+        emailTitle: "Skriva til bestýraran",
+        siteLinkTitle: "Til heimasíðuna hjá Á handli",
+        siteLinkSmall: "Meira kunning um handilin",
+        phrasesEyebrow: "Góð ráð",
+        phrasesTitle: "Tá tú vitjar",
+        phrasesIntro: "Spyr endiliga starvsfólkini, um tú ikki finnur tað, tú leitar eftir.",
+        phraseOneFo: "Góðan dag",
+        phraseOneHelp: "Heilsan",
+        phraseTwoFo: "Hvar finni eg ...?",
+        phraseTwoHelp: "Spyr hvar okkurt er",
+        phraseThreeFo: "Kann eg fáa hjálp?",
+        phraseThreeHelp: "Spyr um hjálp",
+        phraseFourFo: "Takk fyri",
+        phraseFourHelp: "Takking",
+        foAdviceOneTitle: "Spyr starvsfólkini",
+        foAdviceOneText: "Um tú ikki finnur tað, tú leitar eftir, hjálpa vit fegin.",
+        foAdviceTwoTitle: "Ring ella skriva",
+        foAdviceTwoText: "Tú kanst seta teg í samband við handilin, um tú hevur spurningar.",
+        footerText: "Skjótir leinkir",
+        bottomHours: "Upplatingartíðir",
+        bottomOffers: "Sí tilboð",
+        bottomWebsite: "Heimasíða"
       },
-      {
-        key: "heroEyebrow",
-        context: "Grøn hero-boks, lille label",
-        text: {
-          da: "📍 Velkommen til Á handil",
-          en: "📍 Welcome to Á handil",
-          fr: "📍 Bienvenue chez Á handil",
-          fo: "📍 Vælkomin í Á handil",
-          de: "📍 Willkommen bei Á handil"
-        }
-      },
-      {
-        key: "heroTitle",
-        context: "Primær overskrift",
-        text: {
-          da: "Ny her?",
-          en: "New here?",
-          fr: "Nouveau ici ?",
-          fo: "Nýggj/ur her?",
-          de: "Neu hier?"
-        }
-      },
-      {
-        key: "heroText",
-        context: "Intro under hero-overskrift",
-        text: {
-          da: "Her finder du åbningstider, et lille indblik i Á handil og lidt hjælp, hvis du er i tvivl om noget.",
-          en: "Here you can find opening hours, a short introduction to Á handil, and a little help if you are unsure about anything.",
-          fr: "Vous trouverez ici les horaires, une petite présentation de Á handil et un peu d’aide si vous avez un doute.",
-          fo: "Her finnur tú upplatingartíðir, eitt lítið innlit í Á handil og eitt sindur av hjálp, um tú ert í iva um okkurt.",
-          de: "Hier findest du die Öffnungszeiten, einen kurzen Einblick in Á handil und etwas Hilfe, falls du unsicher bist."
-        }
-      },
-      {
-        key: "facadeTitle",
-        context: "Afsnitstitel ved facadefoto",
-        text: {
-          da: "Sådan ser Á handil ud",
-          en: "This is what Á handil looks like",
-          fr: "Voici à quoi ressemble Á handil",
-          fo: "Soleiðis sær Á handil út",
-          de: "So sieht Á handil aus"
-        }
-      },
-      {
-        key: "facadeSub",
-        context: "Hjælpetekst ved facadefoto",
-        text: {
-          da: "Butikken kan kendes på den mørke facade og det grønne Á.",
-          en: "The shop can be recognised by its dark facade and the green Á.",
-          fr: "Le magasin se reconnaît à sa façade sombre et au Á vert.",
-          fo: "Handilin kennist aftur á myrku fasaduni og tí grøna Á-num.",
-          de: "Du erkennst den Laden an der dunklen Fassade und dem grünen Á."
-        }
-      },
-      {
-        key: "facadeTag",
-        context: "Kort tag på facadekort",
-        text: {
-          da: "Kendetegn",
-          en: "Landmark",
-          fr: "Repère",
-          fo: "Kennimerki",
-          de: "Erkennungszeichen"
-        }
-      },
-      {
-        key: "facadeCardTitle",
-        context: "Titel under facadefoto",
-        text: {
-          da: "Á handil udefra",
-          en: "Á handil from outside",
-          fr: "Á handil vu de l’extérieur",
-          fo: "Á handil uttanífrá",
-          de: "Á handil von außen"
-        }
-      },
-      {
-        key: "facadeText",
-        context: "Beskrivelse under facadefoto",
-        text: {
-          da: "Billedet viser, hvordan butikken ser ud ved ankomst.",
-          en: "The image shows what the shop looks like when you arrive.",
-          fr: "L’image montre à quoi ressemble le magasin à l’arrivée.",
-          fo: "Myndin vísir, hvussu handilin sær út, tá tú kemur fram.",
-          de: "Das Bild zeigt, wie der Laden aussieht, wenn du ankommst."
-        }
-      },
-      {
-        key: "hoursTitle",
-        context: "Afsnit om åbningstider",
-        text: {
-          da: "Åbningstider",
-          en: "Opening hours",
-          fr: "Horaires",
-          fo: "Upplatingartíðir",
-          de: "Öffnungszeiten"
-        }
-      },
-      {
-        key: "hoursSub",
-        context: "Undertitel til åbningstider",
-        text: {
-          da: "Praktisk information",
-          en: "Practical information",
-          fr: "Informations pratiques",
-          fo: "Praktisk kunning",
-          de: "Praktische Informationen"
-        }
-      },
-      {
-        key: "practicalTag",
-        context: "Tag på åbningstidskort",
-        text: {
-          da: "Praktisk info",
-          en: "Practical info",
-          fr: "Infos pratiques",
-          fo: "Praktisk kunning",
-          de: "Praktische Infos"
-        }
-      },
-      {
-        key: "hoursOpenTitle",
-        context: "Overskrift i åbningstidskort",
-        text: {
-          da: "Butikken holder åbent",
-          en: "The shop is open",
-          fr: "Le magasin est ouvert",
-          fo: "Handilin er opin",
-          de: "Der Laden ist geöffnet"
-        }
-      },
-      {
-        key: "weekdayLabel",
-        context: "Mandag til fredag",
-        text: {
-          da: "Mandag–fredag",
-          en: "Monday–Friday",
-          fr: "Lundi–vendredi",
-          fo: "Mánadag–fríggjadag",
-          de: "Montag–Freitag"
-        }
-      },
-      {
-        key: "saturdayLabel",
-        context: "Lørdag",
-        text: {
-          da: "Lørdag",
-          en: "Saturday",
-          fr: "Samedi",
-          fo: "Leygardag",
-          de: "Samstag"
-        }
-      },
-      {
-        key: "sundayLabel",
-        context: "Søndag",
-        text: {
-          da: "Søndag",
-          en: "Sunday",
-          fr: "Dimanche",
-          fo: "Sunnudag",
-          de: "Sonntag"
-        }
-      },
-      {
-        key: "closedLabel",
-        context: "Lukket-status",
-        text: {
-          da: "Lukket",
-          en: "Closed",
-          fr: "Fermé",
-          fo: "Stongt",
-          de: "Geschlossen"
-        }
-      },
-      {
-        key: "hoursNote",
-        context: "Note ved helligdage",
-        text: {
-          da: "Tjek gerne hjemmesiden eller opslag ved butikken ved helligdage.",
-          en: "Please check the website or the notice at the shop on public holidays.",
-          fr: "Veuillez vérifier le site web ou l’affiche du magasin les jours fériés.",
-          fo: "Kanna fegin heimasíðuna ella uppslagið við handilin halgidagar.",
-          de: "Bitte prüfe an Feiertagen die Website oder den Aushang beim Laden."
-        }
-      },
-      {
-        key: "welcomeTitle",
-        context: "Første indblik-afsnit",
-        text: {
-          da: "Et lille første indblik",
-          en: "A small first glimpse",
-          fr: "Un petit premier aperçu",
-          fo: "Eitt lítið fyrsta innlit",
-          de: "Ein erster kleiner Einblick"
-        }
-      },
-      {
-        key: "welcomeText",
-        context: "Beskrivelse af lokal butik",
-        text: {
-          da: "Á handil er den lokale butik i Vestmanna. Her kan du handle, spørge og få hjælp, hvis du er i tvivl om noget.",
-          en: "Á handil is the local shop in Vestmanna. Here you can shop, ask questions, and get help if you are unsure about something.",
-          fr: "Á handil est le magasin local de Vestmanna. Ici, vous pouvez faire vos courses, poser des questions et obtenir de l’aide si besoin.",
-          fo: "Á handil er tann lokali handilin í Vestmanna. Her kanst tú keypa, spyrja og fáa hjálp, um tú ert í iva um okkurt.",
-          de: "Á handil ist der lokale Laden in Vestmanna. Hier kannst du einkaufen, Fragen stellen und Hilfe bekommen, wenn du unsicher bist."
-        }
-      },
-      {
-        key: "localTag",
-        context: "Kort tag om butikken",
-        text: {
-          da: "Lokal butik",
-          en: "Local shop",
-          fr: "Magasin local",
-          fo: "Lokalur handil",
-          de: "Lokaler Laden"
-        }
-      },
-      {
-        key: "localTitle",
-        context: "Overskrift om hverdagsliv",
-        text: {
-          da: "En del af hverdagen i bygden",
-          en: "Part of everyday village life",
-          fr: "Une part de la vie quotidienne du village",
-          fo: "Partur av gerandisdegnum í bygdini",
-          de: "Ein Teil des Alltags im Dorf"
-        }
-      },
-      {
-        key: "localText",
-        context: "Beskrivelse af butik som lokalt mødested",
-        text: {
-          da: "Á handil er ikke kun et sted for indkøb. Det er også en lokal butik, hvor folk ofte stopper op, hilser og får en lille snak.",
-          en: "Á handil is not only a place to shop. It is also a local shop where people often stop, greet each other, and have a short chat.",
-          fr: "Á handil n’est pas seulement un lieu d’achat. C’est aussi un magasin local où les gens s’arrêtent souvent, se saluent et échangent quelques mots.",
-          fo: "Á handil er ikki bara eitt stað at keypa. Tað er eisini ein lokalur handil, har fólk ofta steðga, heilsa og fáa sær eina lítla samrøðu.",
-          de: "Á handil ist nicht nur ein Ort zum Einkaufen. Es ist auch ein lokaler Laden, wo Menschen oft kurz stehen bleiben, einander grüßen und ein paar Worte wechseln."
-        }
-      },
-      {
-        key: "offersTag",
-        context: "Tilbudskort tag",
-        text: {
-          da: "Tilbud",
-          en: "Offers",
-          fr: "Offres",
-          fo: "Tilboð",
-          de: "Angebote"
-        }
-      },
-      {
-        key: "offersTitle",
-        context: "Tilbudskort titel",
-        text: {
-          da: "Se ugens tilbud",
-          en: "See this week’s offers",
-          fr: "Voir les offres de la semaine",
-          fo: "Sí vikunnar tilboð",
-          de: "Angebote der Woche ansehen"
-        }
-      },
-      {
-        key: "offersText",
-        context: "Beskrivelse af tilbudsblad",
-        text: {
-          da: "Du kan også åbne butikkens tilbudsblad. Tilbudsbladet er på færøsk.",
-          en: "You can also open the shop’s offer leaflet. The leaflet is in Faroese.",
-          fr: "Vous pouvez aussi ouvrir le prospectus des offres du magasin. Le prospectus est en féroïen.",
-          fo: "Tú kanst eisini lata upp tilboðsbløðini hjá handlinum. Tilboðsblaðið er á føroyskum.",
-          de: "Du kannst auch das Angebotsblatt des Ladens öffnen. Das Angebotsblatt ist auf Färöisch."
-        }
-      },
-      {
-        key: "offersLinkTitle",
-        context: "Knap til tilbudsblad",
-        text: {
-          da: "Åbn tilbudsblad",
-          en: "Open offer leaflet",
-          fr: "Ouvrir le prospectus",
-          fo: "Lat tilboðsblaðið upp",
-          de: "Angebotsblatt öffnen"
-        }
-      },
-      {
-        key: "offersLinkSmall",
-        context: "Lille tekst under tilbudsblad-knap",
-        text: {
-          da: "PDF på færøsk",
-          en: "PDF in Faroese",
-          fr: "PDF en féroïen",
-          fo: "PDF á føroyskum",
-          de: "PDF auf Färöisch"
-        }
-      },
-      {
-        key: "helpTag",
-        context: "Hjælpekort tag",
-        text: {
-          da: "Har du brug for hjælp?",
-          en: "Need help?",
-          fr: "Besoin d’aide ?",
-          fo: "Hevur tú tørv á hjálp?",
-          de: "Brauchst du Hilfe?"
-        }
-      },
-      {
-        key: "helpTitle",
-        context: "Hjælpekort titel",
-        text: {
-          da: "Spørg os gerne",
-          en: "Feel free to ask",
-          fr: "N’hésitez pas à demander",
-          fo: "Spyr okkum endiliga",
-          de: "Frag uns gerne"
-        }
-      },
-      {
-        key: "helpText",
-        context: "Hjælpetekst",
-        text: {
-          da: "Hvis du leder efter noget bestemt eller vil vide mere om butikken, hjælper vi gerne.",
-          en: "If you are looking for something specific or want to know more about the shop, we are happy to help.",
-          fr: "Si vous cherchez quelque chose de précis ou si vous voulez en savoir plus sur le magasin, nous serons heureux de vous aider.",
-          fo: "Um tú leitar eftir nøkrum ávísum ella vilt vita meira um handilin, hjálpa vit fegin.",
-          de: "Wenn du etwas Bestimmtes suchst oder mehr über den Laden wissen möchtest, helfen wir gerne."
-        }
-      },
-      {
-        key: "siteLinkTitle",
-        context: "Knap til hjemmeside",
-        text: {
-          da: "Til Á handils hjemmeside",
-          en: "Go to Á handil website",
-          fr: "Aller au site web de Á handil",
-          fo: "Til heimasíðuna hjá Á handli",
-          de: "Zur Website von Á handil"
-        }
-      },
-      {
-        key: "siteLinkSmall",
-        context: "Lille tekst under hjemmeside-knap",
-        text: {
-          da: "Mere information om butikken",
-          en: "More information about the shop",
-          fr: "Plus d’informations sur le magasin",
-          fo: "Meira kunning um handilin",
-          de: "Weitere Informationen über den Laden"
-        }
+
+      de: {
+        pageTitle: "Neu hier? | Á handil in Vestmanna",
+        skipLink: "Zum Inhalt springen",
+        statusRight: "Vestmanna",
+        brandSmall: "Unterseite",
+        brandStrong: "Á handil in Vestmanna",
+        heroEyebrow: "Willkommen bei Á handil",
+        heroTitle: "Neu hier?",
+        heroText: "Hier findest du Öffnungszeiten, einen kurzen Einblick in Á handil und etwas Hilfe, falls du unsicher bist.",
+        quickHoursTitle: "Öffnungszeiten",
+        quickHoursText: "Sieh, wann der Laden geöffnet ist",
+        quickOffersTitle: "Angebote",
+        quickOffersText: "Öffne das Wochenblatt",
+        quickLookTitle: "Den Laden finden",
+        quickLookText: "Sieh die Fassade von außen",
+        quickHelpTitle: "Hilfe",
+        quickHelpText: "Kontakt und Website",
+        facadeTitle: "So sieht Á handil aus",
+        facadeSub: "Der Laden ist an der dunklen Fassade und dem grünen Á zu erkennen.",
+        facadeTag: "Erkennungsmerkmal",
+        facadeCardTitle: "Á handil von außen",
+        facadeText: "Das Bild zeigt, wie der Laden bei der Ankunft aussieht.",
+        hoursTitle: "Öffnungszeiten",
+        hoursSub: "Praktische Informationen",
+        practicalTag: "Praktische Info",
+        hoursOpenTitle: "Der Laden ist geöffnet",
+        weekdayLabel: "Montag–Freitag",
+        saturdayLabel: "Samstag",
+        sundayLabel: "Sonntag",
+        closedLabel: "Geschlossen",
+        hoursNote: "Bitte prüfe an Feiertagen die Website oder den Aushang beim Laden.",
+        welcomeTitle: "Ein kleiner erster Einblick",
+        welcomeText: "Á handil ist der lokale Laden in Vestmanna. Hier kannst du einkaufen, fragen und Hilfe bekommen, wenn du unsicher bist.",
+        localTag: "Lokaler Laden",
+        localTitle: "Ein Teil des Alltags im Dorf",
+        localText: "Á handil ist nicht nur ein Ort zum Einkaufen. Es ist auch ein lokaler Laden, in dem Menschen oft anhalten, grüßen und kurz miteinander sprechen.",
+        offersTag: "Angebote",
+        offersTitle: "Sieh die Angebote der Woche",
+        offersText: "Du kannst auch das Angebotsblatt des Ladens öffnen. Das Angebotsblatt ist auf Färöisch.",
+        offersLinkTitle: "Angebotsblatt öffnen",
+        offersLinkSmall: "PDF auf Färöisch",
+        helpTag: "Brauchst du Hilfe?",
+        helpTitle: "Frag uns gern",
+        helpText: "Wenn du etwas Bestimmtes suchst oder mehr über den Laden wissen möchtest, helfen wir gern.",
+        phoneTitle: "Den Laden anrufen",
+        emailTitle: "Dem Geschäftsführer schreiben",
+        siteLinkTitle: "Zur Website von Á handil",
+        siteLinkSmall: "Mehr Informationen über den Laden",
+        phrasesEyebrow: "Eine kleine Hilfe im Laden",
+        phrasesTitle: "Sag es auf Färöisch",
+        phrasesIntro: "Ein kleines Mini-Wörterbuch für neue Kundinnen und Kunden, damit es etwas leichter ist, um Hilfe zu fragen.",
+        phraseOneFo: "Góðan dag",
+        phraseOneHelp: "Hallo / guten Tag",
+        phraseTwoFo: "Hvar finni eg ...?",
+        phraseTwoHelp: "Wo finde ich ...?",
+        phraseThreeFo: "Kann eg fáa hjálp?",
+        phraseThreeHelp: "Kann ich Hilfe bekommen?",
+        phraseFourFo: "Takk fyri",
+        phraseFourHelp: "Danke",
+        foAdviceOneTitle: "Frag das Personal",
+        foAdviceOneText: "Wenn du nicht findest, wonach du suchst, helfen wir gern.",
+        foAdviceTwoTitle: "Anrufen oder schreiben",
+        foAdviceTwoText: "Du kannst den Laden kontaktieren, wenn du Fragen hast.",
+        footerText: "Schnelle Links",
+        bottomHours: "Öffnungszeiten",
+        bottomOffers: "Angebote ansehen",
+        bottomWebsite: "Website"
       }
-    ];
+    };
 
-    function cloneData(value) {
-      return JSON.parse(JSON.stringify(value));
+    const contexts = {
+      pageTitle: ["navigation", "Browser title / sidetitel"],
+      skipLink: ["navigation", "Skjult accessibility-link øverst"],
+      statusRight: ["navigation", "Top-pill / stednavn"],
+      brandSmall: ["navigation", "Lille tekst over butiksnavn i header"],
+      brandStrong: ["navigation", "Butiksnavn i header"],
+      heroEyebrow: ["hero", "Lille label i hero"],
+      heroTitle: ["hero", "Primær hero-overskrift"],
+      heroText: ["hero", "Intro under hero-overskrift"],
+      quickHoursTitle: ["navigation", "Quick action: åbningstider titel"],
+      quickHoursText: ["navigation", "Quick action: åbningstider tekst"],
+      quickOffersTitle: ["navigation", "Quick action: tilbud titel"],
+      quickOffersText: ["navigation", "Quick action: tilbud tekst"],
+      quickLookTitle: ["navigation", "Quick action: find butikken titel"],
+      quickLookText: ["navigation", "Quick action: find butikken tekst"],
+      quickHelpTitle: ["navigation", "Quick action: hjælp titel"],
+      quickHelpText: ["navigation", "Quick action: hjælp tekst"],
+      facadeTitle: ["facade", "Overskrift til facade-sektion"],
+      facadeSub: ["facade", "Kort forklaring af hvordan butikken kan genkendes"],
+      facadeTag: ["facade", "Lille tag over facadekort"],
+      facadeCardTitle: ["facade", "Titel på facadekort"],
+      facadeText: ["facade", "Brødtekst om billedet af butikken"],
+      hoursTitle: ["hours", "Overskrift til åbningstider"],
+      hoursSub: ["hours", "Underoverskrift til åbningstider"],
+      practicalTag: ["hours", "Tag til praktisk info"],
+      hoursOpenTitle: ["hours", "Titel over åbningstider"],
+      weekdayLabel: ["hours", "Label for mandag til fredag"],
+      saturdayLabel: ["hours", "Label for lørdag"],
+      sundayLabel: ["hours", "Label for søndag"],
+      closedLabel: ["hours", "Lukket-label"],
+      hoursNote: ["hours", "Note om helligdage"],
+      welcomeTitle: ["local", "Overskrift til første indblik"],
+      welcomeText: ["local", "Kort intro til Á handil"],
+      localTag: ["local", "Tag til lokal butik"],
+      localTitle: ["local", "Overskrift om lokal rolle"],
+      localText: ["local", "Brødtekst om hverdagsrolle i bygden"],
+      offersTag: ["offers", "Tag til tilbud"],
+      offersTitle: ["offers", "Overskrift til tilbudssektion"],
+      offersText: ["offers", "Brødtekst om tilbudsblad"],
+      offersLinkTitle: ["offers", "Titel på link til tilbudsblad"],
+      offersLinkSmall: ["offers", "Lille tekst under tilbudslink"],
+      helpTag: ["help", "Tag til hjælp-sektion"],
+      helpTitle: ["help", "Overskrift til hjælp-sektion"],
+      helpText: ["help", "Brødtekst om hjælp"],
+      phoneTitle: ["help", "Telefonkontakt"],
+      emailTitle: ["help", "Emailkontakt"],
+      siteLinkTitle: ["help", "Titel på link til hjemmeside"],
+      siteLinkSmall: ["help", "Lille tekst under hjemmesidelink"],
+      phrasesEyebrow: ["phrases", "Lille label til sprog-hjælp"],
+      phrasesTitle: ["phrases", "Overskrift til mini-ordbog"],
+      phrasesIntro: ["phrases", "Intro til mini-ordbog"],
+      phraseOneFo: ["phrases", "Færøsk frase 1"],
+      phraseOneHelp: ["phrases", "Forklaring til frase 1"],
+      phraseTwoFo: ["phrases", "Færøsk frase 2"],
+      phraseTwoHelp: ["phrases", "Forklaring til frase 2"],
+      phraseThreeFo: ["phrases", "Færøsk frase 3"],
+      phraseThreeHelp: ["phrases", "Forklaring til frase 3"],
+      phraseFourFo: ["phrases", "Færøsk frase 4"],
+      phraseFourHelp: ["phrases", "Forklaring til frase 4"],
+      foAdviceOneTitle: ["phrases", "Råd 1 titel"],
+      foAdviceOneText: ["phrases", "Råd 1 tekst"],
+      foAdviceTwoTitle: ["phrases", "Råd 2 titel"],
+      foAdviceTwoText: ["phrases", "Råd 2 tekst"],
+      footerText: ["footer", "Footer intro"],
+      bottomHours: ["footer", "Footer link til åbningstider"],
+      bottomOffers: ["footer", "Footer link til tilbud"],
+      bottomWebsite: ["footer", "Footer link til hjemmeside"]
+    };
+
+    const sourceStrings = Object.keys(translations.da).map((key) => {
+      const [category, context] = contexts[key] || ["other", key];
+
+      return {
+        key,
+        category,
+        context,
+        text: Object.fromEntries(
+          languages.map(language => [
+            language.code,
+            translations[language.code]?.[key] || ""
+          ])
+        )
+      };
+    });
+
+    const byId = (id) => document.getElementById(id);
+    const cloneData = (value) => JSON.parse(JSON.stringify(value));
+    const validCodes = () => languages.map(language => language.code);
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
 
-    function getInitialData() {
-      const saved = localStorage.getItem(STORAGE_KEY);
+    function wordCount(value) {
+      return String(value || "")
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean)
+        .length;
+    }
 
-      if (saved) {
-        try {
-          return JSON.parse(saved);
-        } catch (error) {
-          console.warn("Kunne ikke læse gemte data", error);
-        }
+    function languageByCode(code) {
+      return languages.find(language => language.code === code);
+    }
+
+    function normalizeSettings(settings = {}) {
+      const codes = validCodes();
+
+      let visibleLanguages = Array.from(
+        new Set(settings.visibleLanguages || ["da", "fo"])
+      ).filter(code => codes.includes(code));
+
+      if (!visibleLanguages.length) {
+        visibleLanguages = ["da"];
       }
 
+      return { visibleLanguages };
+    }
+
+    function mergeSavedData(savedRows) {
+      return sourceStrings.map(source => {
+        const saved = Array.isArray(savedRows)
+          ? savedRows.find(row => row.key === source.key)
+          : null;
+
+        return {
+          ...cloneData(source),
+          status: saved?.status || "needs-review",
+          comment: saved?.comment || "",
+          edited: {
+            ...cloneData(source.text),
+            ...(saved?.edited || {})
+          }
+        };
+      });
+    }
+
+    function getFreshData() {
       return sourceStrings.map(item => ({
         ...cloneData(item),
         status: "needs-review",
@@ -1047,76 +1271,36 @@
       }));
     }
 
-    function getInitialSettings() {
-      const fallback = {
-        primaryLanguage: "da",
-        visibleLanguages: ["da", "fo"]
-      };
-
-      const saved = localStorage.getItem(SETTINGS_KEY);
-      if (!saved) return fallback;
-
+    function getInitialData() {
       try {
-        const parsed = JSON.parse(saved);
-        const validCodes = languages.map(language => language.code);
-        const primaryLanguage = validCodes.includes(parsed.primaryLanguage)
-          ? parsed.primaryLanguage
-          : fallback.primaryLanguage;
-        const visibleLanguages = Array.isArray(parsed.visibleLanguages)
-          ? parsed.visibleLanguages.filter(code => validCodes.includes(code))
-          : fallback.visibleLanguages;
-
-        return normalizeSettings({ primaryLanguage, visibleLanguages });
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+        if (saved) return mergeSavedData(saved);
       } catch (error) {
-        console.warn("Kunne ikke læse gemte indstillinger", error);
-        return fallback;
+        console.warn("Could not read saved data", error);
       }
+
+      return getFreshData();
     }
 
-    function normalizeSettings(settings) {
-      const validCodes = languages.map(language => language.code);
-      let primaryLanguage = validCodes.includes(settings.primaryLanguage)
-        ? settings.primaryLanguage
-        : languages[0].code;
-
-      let visibleLanguages = Array.from(new Set(settings.visibleLanguages || []))
-        .filter(code => validCodes.includes(code));
-
-      if (!visibleLanguages.includes(primaryLanguage)) {
-        visibleLanguages.unshift(primaryLanguage);
+    function getInitialSettings() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "null");
+        if (saved) return normalizeSettings(saved);
+      } catch (error) {
+        console.warn("Could not read saved settings", error);
       }
 
-      while (visibleLanguages.length < MIN_LANGUAGES) {
-        const nextLanguage = validCodes.find(code => !visibleLanguages.includes(code));
-        if (!nextLanguage) break;
-        visibleLanguages.push(nextLanguage);
-      }
-
-      if (visibleLanguages.length > MAX_LANGUAGES) {
-        visibleLanguages = [
-          primaryLanguage,
-          ...visibleLanguages.filter(code => code !== primaryLanguage)
-        ].slice(0, MAX_LANGUAGES);
-      }
-
-      return { primaryLanguage, visibleLanguages };
+      return normalizeSettings();
     }
 
     let data = getInitialData();
     let settings = getInitialSettings();
 
-    const stringsEl = document.getElementById("strings");
-    const emptyEl = document.getElementById("empty");
-    const searchInput = document.getElementById("searchInput");
-    const primaryLanguage = document.getElementById("primaryLanguage");
-    const statusFilter = document.getElementById("statusFilter");
-    const languageChecks = document.getElementById("languageChecks");
-    const toolbar = document.querySelector(".toolbar");
-    const toggleLanguagePanel = document.getElementById("toggleLanguagePanel");
-    const countVisible = document.getElementById("countVisible");
-    const countApproved = document.getElementById("countApproved");
-    const countIssues = document.getElementById("countIssues");
-    const countLanguages = document.getElementById("countLanguages");
+    const stringsEl = byId("strings");
+    const emptyEl = byId("empty");
+    const languageChecks = byId("languageChecks");
+    const searchInput = byId("searchInput");
+    const statusFilter = byId("statusFilter");
 
     function saveData() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -1126,43 +1310,25 @@
       localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
     }
 
-    function getLanguagePanelVisible() {
-      return localStorage.getItem(LANGUAGE_PANEL_KEY) !== "hidden";
-    }
-
-    function setLanguagePanelVisible(isVisible) {
-      localStorage.setItem(LANGUAGE_PANEL_KEY, isVisible ? "visible" : "hidden");
-      toolbar.classList.toggle("languages-collapsed", !isVisible);
-      toggleLanguagePanel.textContent = isVisible ? "Skjul sprogvalg" : "Vis sprogvalg";
-      toggleLanguagePanel.setAttribute("aria-expanded", String(isVisible));
-    }
-
-    function languageByCode(code) {
-      return languages.find(language => language.code === code);
-    }
-
     function getChosenLanguages() {
       settings = normalizeSettings(settings);
+
       return settings.visibleLanguages
         .map(code => languageByCode(code))
-        .filter(Boolean)
-        .map(language => ({
-          ...language,
-          role: language.code === settings.primaryLanguage ? "primary" : "secondary"
-        }));
+        .filter(Boolean);
     }
 
     function renderLanguageControls() {
       settings = normalizeSettings(settings);
-      primaryLanguage.value = settings.primaryLanguage;
 
       languageChecks.innerHTML = languages.map(language => {
-        const checked = settings.visibleLanguages.includes(language.code) ? "checked" : "";
-        const disabled = language.code === settings.primaryLanguage ? "disabled" : "";
+        const checked = settings.visibleLanguages.includes(language.code)
+          ? "checked"
+          : "";
 
         return `
           <label>
-            <input type="checkbox" value="${escapeHtml(language.code)}" ${checked} ${disabled}>
+            <input type="checkbox" value="${escapeHtml(language.code)}" ${checked}>
             ${escapeHtml(language.label)}
           </label>
         `;
@@ -1180,28 +1346,23 @@
           item.status === status ||
           (status === "issue" && item.comment.trim());
 
-        const haystackParts = [item.key, item.context, item.comment];
+        const haystack = [
+          item.key,
+          item.context,
+          item.category,
+          item.comment
+        ];
 
         chosenLanguages.forEach(language => {
-          haystackParts.push(item.text[language.code] || "");
-          haystackParts.push(item.edited[language.code] || "");
+          haystack.push(
+            item.text[language.code] || "",
+            item.edited[language.code] || ""
+          );
         });
 
-        const queryMatch =
-          !query ||
-          haystackParts.join(" ").toLowerCase().includes(query);
-
-        return statusMatch && queryMatch;
+        return statusMatch &&
+          (!query || haystack.join(" ").toLowerCase().includes(query));
       });
-    }
-
-    function escapeHtml(value) {
-      return String(value || "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
     }
 
     function render() {
@@ -1210,140 +1371,102 @@
       const filtered = getFilteredData();
       const visibleLanguages = getChosenLanguages();
 
-      stringsEl.style.setProperty("--visible-count", String(visibleLanguages.length));
+      stringsEl.style.setProperty(
+        "--visible-count",
+        String(Math.max(visibleLanguages.length, 1))
+      );
 
-      stringsEl.innerHTML = filtered.map((item) => {
-        const originalIndex = data.findIndex(row => row.key === item.key);
+      stringsEl.innerHTML = filtered.map(item => {
+        const index = data.findIndex(row => row.key === item.key);
+        const hasComment = Boolean(item.comment.trim());
 
         return `
-          <article class="string-card" data-key="${escapeHtml(item.key)}">
-            <div class="string-head">
-              <div>
-                <div class="key">${escapeHtml(item.key)}</div>
-                <div class="context">${escapeHtml(item.context)}</div>
+          <article class="key-row" data-status="${escapeHtml(item.status)}" data-has-comment="${hasComment}">
+            <header class="key-head">
+              <div class="key-name">
+                <span class="status-dot" aria-hidden="true"></span>
+                <code>${escapeHtml(item.key)}</code>
+                <span class="category">${escapeHtml(item.category)}</span>
+                <span class="context">${escapeHtml(item.context)}</span>
               </div>
-              <select data-action="status" data-index="${originalIndex}" aria-label="Status for ${escapeHtml(item.key)}">
-                <option value="needs-review" ${item.status === "needs-review" ? "selected" : ""}>Skal tjekkes</option>
-                <option value="approved" ${item.status === "approved" ? "selected" : ""}>Godkendt</option>
-              </select>
-            </div>
 
-            <div class="grid">
+              <div class="row-actions">
+                <button type="button" class="tiny-button" data-action="toggle-status" data-index="${index}">
+                  ${item.status === "approved" ? "Approved" : "Approve"}
+                </button>
+              </div>
+            </header>
+
+            <div class="translation-grid">
               ${visibleLanguages.map(language => `
-                <div class="cell">
-                  <label>
-                    <span class="label-left">
-                      ${escapeHtml(language.label)}
-                      ${language.role === "primary" ? '<span class="primary-badge">Primary</span>' : '<span class="compare-badge">Check</span>'}
-                    </span>
+                <section class="translation-cell">
+                  <div class="cell-head">
+                    <span>${escapeHtml(language.label)}</span>
                     <span>${escapeHtml(language.code.toUpperCase())}</span>
-                  </label>
+                  </div>
+
                   <div class="source-text">${escapeHtml(item.text[language.code])}</div>
-                  <textarea data-action="edit" data-index="${originalIndex}" data-lang="${language.code}" aria-label="Ret ${language.label} for ${escapeHtml(item.key)}">${escapeHtml(item.edited[language.code])}</textarea>
-                </div>
+
+                  <textarea
+                    class="translation-input"
+                    data-action="edit"
+                    data-index="${index}"
+                    data-lang="${language.code}"
+                    aria-label="Edit ${escapeHtml(language.label)} for ${escapeHtml(item.key)}"
+                  >${escapeHtml(item.edited[language.code])}</textarea>
+                </section>
               `).join("")}
             </div>
 
-            <div class="status-row">
-              <div>
-                <strong>Kommentar</strong>
-                <div class="context">Skriv fx “ok”, “lyder forkert”, “skal være mere høfligt” osv.</div>
+            <footer class="comment-row">
+              <div class="comment-label">
+                <strong>Comment</strong>
+                <span>Notes, wording issues or approval context.</span>
               </div>
-              <textarea data-action="comment" data-index="${originalIndex}" aria-label="Kommentar for ${escapeHtml(item.key)}">${escapeHtml(item.comment)}</textarea>
-            </div>
+
+              <textarea
+                data-action="comment"
+                data-index="${index}"
+                aria-label="Comment for ${escapeHtml(item.key)}"
+              >${escapeHtml(item.comment)}</textarea>
+            </footer>
           </article>
         `;
       }).join("");
 
       emptyEl.classList.toggle("visible", filtered.length === 0);
-      countVisible.textContent = filtered.length;
-      countApproved.textContent = data.filter(item => item.status === "approved").length;
-      countIssues.textContent = data.filter(item => item.comment.trim()).length;
-      countLanguages.textContent = visibleLanguages.length;
+      updateCounts(filtered.length, visibleLanguages.length);
     }
 
-    stringsEl.addEventListener("input", (event) => {
-      const target = event.target;
-      const index = Number(target.dataset.index);
-      const action = target.dataset.action;
+    function updateCounts(
+      visibleCount = getFilteredData().length,
+      languageCount = getChosenLanguages().length
+    ) {
+      const total = data.length;
+      const approved = data.filter(item => item.status === "approved").length;
+      const issues = data.filter(item => item.comment.trim()).length;
+      const left = total - approved;
+      const percent = total ? Math.round((approved / total) * 100) : 0;
 
-      if (!Number.isInteger(index) || !data[index]) return;
+      const wordsLeft = data
+        .filter(item => item.status !== "approved")
+        .reduce((sum, item) => {
+          return sum + getChosenLanguages().reduce((langSum, language) => {
+            return langSum + wordCount(item.edited[language.code]);
+          }, 0);
+        }, 0);
 
-      if (action === "edit") {
-        data[index].edited[target.dataset.lang] = target.value;
-      }
+      byId("countVisible").textContent = visibleCount;
+      byId("countApproved").textContent = approved;
+      byId("countIssues").textContent = issues;
+      byId("countLanguages").textContent = languageCount;
+      byId("countTotal").textContent = total;
+      byId("sidePercent").textContent = `${percent}%`;
 
-      if (action === "comment") {
-        data[index].comment = target.value;
-      }
-
-      saveData();
-      updateCountsOnly();
-    });
-
-    stringsEl.addEventListener("change", (event) => {
-      const target = event.target;
-      const index = Number(target.dataset.index);
-
-      if (target.dataset.action === "status" && data[index]) {
-        data[index].status = target.value;
-        saveData();
-        render();
-      }
-    });
-
-    languageChecks.addEventListener("change", (event) => {
-      const target = event.target;
-      if (target.type !== "checkbox") return;
-
-      const code = target.value;
-      let visibleLanguages = [...settings.visibleLanguages];
-
-      if (target.checked && !visibleLanguages.includes(code)) {
-        if (visibleLanguages.length >= MAX_LANGUAGES) {
-          target.checked = false;
-          alert(`Du kan højst vælge ${MAX_LANGUAGES} sprog ad gangen.`);
-          return;
-        }
-        visibleLanguages.push(code);
-      }
-
-      if (!target.checked && visibleLanguages.includes(code)) {
-        if (code === settings.primaryLanguage) {
-          target.checked = true;
-          return;
-        }
-
-        if (visibleLanguages.length <= MIN_LANGUAGES) {
-          target.checked = true;
-          alert(`Du skal vælge mindst ${MIN_LANGUAGES} sprog.`);
-          return;
-        }
-
-        visibleLanguages = visibleLanguages.filter(languageCode => languageCode !== code);
-      }
-
-      settings = normalizeSettings({
-        ...settings,
-        visibleLanguages
-      });
-      saveSettings();
-      render();
-    });
-
-    primaryLanguage.addEventListener("change", () => {
-      settings = normalizeSettings({
-        ...settings,
-        primaryLanguage: primaryLanguage.value,
-        visibleLanguages: [primaryLanguage.value, ...settings.visibleLanguages]
-      });
-      saveSettings();
-      render();
-    });
-
-    function updateCountsOnly() {
-      countApproved.textContent = data.filter(item => item.status === "approved").length;
-      countIssues.textContent = data.filter(item => item.comment.trim()).length;
+      byId("progressApproved").textContent = approved;
+      byId("progressLeft").textContent = left;
+      byId("progressWordsLeft").textContent = wordsLeft;
+      byId("progressFill").style.width = `${percent}%`;
     }
 
     function rowsForExport() {
@@ -1352,15 +1475,14 @@
       return data.map(item => {
         const row = {
           key: item.key,
+          category: item.category,
           context: item.context,
           status: item.status,
-          comment: item.comment,
-          primary_language: languageByCode(settings.primaryLanguage).label
+          comment: item.comment
         };
 
         chosenLanguages.forEach(language => {
           row[`${language.code}_language`] = language.label;
-          row[`${language.code}_role`] = language.role;
           row[`${language.code}_original`] = item.text[language.code] || "";
           row[`${language.code}_reviewed`] = item.edited[language.code] || "";
         });
@@ -1372,20 +1494,21 @@
     function downloadExcel() {
       const worksheet = XLSX.utils.json_to_sheet(rowsForExport());
       const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Sprogtjek");
-      XLSX.writeFile(workbook, "ahandil-sprogtjek.xlsx");
+
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Designmodul");
+      XLSX.writeFile(workbook, "ahandil-designmodul.xlsx");
     }
 
     function downloadPdf() {
       const chosenLanguages = getChosenLanguages();
-      const primary = languageByCode(settings.primaryLanguage);
 
       const headers = [
         { text: "Key", bold: true },
+        { text: "Category", bold: true },
         { text: "Status", bold: true },
-        { text: "Kommentar", bold: true },
+        { text: "Comment", bold: true },
         ...chosenLanguages.map(language => ({
-          text: `${language.label} ${language.role === "primary" ? "primary" : "check"}`,
+          text: language.label,
           bold: true
         }))
       ];
@@ -1394,6 +1517,7 @@
         headers,
         ...data.map(item => [
           item.key,
+          item.category,
           item.status,
           item.comment || "",
           ...chosenLanguages.map(language => item.edited[language.code] || "")
@@ -1406,68 +1530,141 @@
         pageMargins: [22, 26, 22, 26],
         defaultStyle: {
           font: "Roboto",
-          fontSize: chosenLanguages.length >= 4 ? 6.2 : 7
+          fontSize: chosenLanguages.length >= 5 ? 5.7 : 6.4
         },
         content: [
           {
-            text: "Á handil · sprogtjek",
+            text: "Á handil · Designmodul",
             fontSize: 16,
             bold: true,
             margin: [0, 0, 0, 4]
           },
           {
-            text: `Primært sprog: ${primary.label} · Synlige sprog: ${chosenLanguages.map(language => language.label).join(", ")}`,
+            text: `Languages: ${chosenLanguages.map(language => language.label).join(", ")}`,
             fontSize: 8,
             margin: [0, 0, 0, 12]
           },
           {
             table: {
               headerRows: 1,
-              widths: [58, 48, 90, ...chosenLanguages.map(() => "*")],
+              widths: [58, 50, 48, 90, ...chosenLanguages.map(() => "*")],
               body
-            },
-            layout: {
-              fillColor: function (rowIndex) {
-                return rowIndex === 0 ? "#ffd947" : null;
-              },
-              hLineColor: function () { return "#151515"; },
-              vLineColor: function () { return "#151515"; },
-              hLineWidth: function () { return 0.7; },
-              vLineWidth: function () { return 0.7; }
             }
           }
         ]
       };
 
-      pdfMake.createPdf(docDefinition).download("ahandil-sprogtjek.pdf");
+      pdfMake.createPdf(docDefinition).download("ahandil-designmodul.pdf");
     }
+
+    function resetAll() {
+      const confirmed = confirm(
+        "Reset everything? This will remove saved edits, comments, approvals and language choices in this browser."
+      );
+
+      if (!confirmed) return;
+
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(SETTINGS_KEY);
+
+      data = getFreshData();
+      settings = normalizeSettings();
+
+      searchInput.value = "";
+      statusFilter.value = "all";
+
+      render();
+    }
+
+    stringsEl.addEventListener("input", (event) => {
+      const target = event.target;
+      const index = Number(target.dataset.index);
+
+      if (!Number.isInteger(index) || !data[index]) return;
+
+      if (target.dataset.action === "edit") {
+        data[index].edited[target.dataset.lang] = target.value;
+      }
+
+      if (target.dataset.action === "comment") {
+        data[index].comment = target.value;
+      }
+
+      saveData();
+      updateCounts();
+    });
+
+    stringsEl.addEventListener("click", (event) => {
+      const button = event.target.closest("button[data-action='toggle-status']");
+      if (!button) return;
+
+      const index = Number(button.dataset.index);
+      if (!data[index]) return;
+
+      data[index].status =
+        data[index].status === "approved"
+          ? "needs-review"
+          : "approved";
+
+      saveData();
+      render();
+    });
+
+    languageChecks.addEventListener("change", (event) => {
+      const target = event.target;
+
+      if (target.type !== "checkbox") return;
+
+      const code = target.value;
+      let visibleLanguages = [...settings.visibleLanguages];
+
+      if (target.checked && !visibleLanguages.includes(code)) {
+        visibleLanguages.push(code);
+      }
+
+      if (!target.checked && visibleLanguages.includes(code)) {
+        visibleLanguages = visibleLanguages.filter(languageCode => languageCode !== code);
+      }
+
+      if (!visibleLanguages.length) {
+        target.checked = true;
+        alert("Choose at least one language.");
+        return;
+      }
+
+      settings = normalizeSettings({ visibleLanguages });
+      saveSettings();
+      render();
+    });
 
     searchInput.addEventListener("input", render);
     statusFilter.addEventListener("change", render);
 
-    toggleLanguagePanel.addEventListener("click", () => {
-      setLanguagePanelVisible(!getLanguagePanelVisible());
-    });
-
-    document.getElementById("saveButton").addEventListener("click", () => {
-      saveData();
-      saveSettings();
-      alert("Gemt i denne browser.");
-    });
-
-    document.getElementById("excelButton").addEventListener("click", downloadExcel);
-    document.getElementById("pdfButton").addEventListener("click", downloadPdf);
-
-    document.getElementById("resetButton").addEventListener("click", () => {
-      if (!confirm("Vil du nulstille alle rettelser, kommentarer og sprogvalg?")) return;
-      localStorage.removeItem(STORAGE_KEY);
-      localStorage.removeItem(SETTINGS_KEY);
-      data = getInitialData();
-      settings = getInitialSettings();
+    byId("clearSearchButton").addEventListener("click", () => {
+      searchInput.value = "";
+      statusFilter.value = "all";
       render();
     });
 
-    setLanguagePanelVisible(getLanguagePanelVisible());
+    byId("excelButton").addEventListener("click", downloadExcel);
+    byId("pdfButton").addEventListener("click", downloadPdf);
+
+    byId("saveButton").addEventListener("click", () => {
+      saveData();
+      saveSettings();
+      alert("Saved in this browser.");
+    });
+
+    byId("resetButton").addEventListener("click", resetAll);
+
+    byId("progressButton").addEventListener("click", () => {
+      byId("progressPanel").classList.toggle("visible");
+    });
+
+    byId("closeProgress").addEventListener("click", () => {
+      byId("progressPanel").classList.remove("visible");
+    });
+
     render();
   </script>
 </body>
